@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "build",
+    "module": "commonjs",
+    "jsx": "react",
+    "target": "es5",
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "strict": true,
+    "noUnusedLocals": false,
+    "suppressImplicitAnyIndexErrors": true,
+    "noImplicitAny": false,
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "exclude": [
+    "node_modules",
+    "build",
+  ]
+}

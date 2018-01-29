@@ -1,0 +1,68 @@
+{
+  "name": "react-mvvm-decorators",
+  "version": "0.1.0",
+  "description": "Apply Model-View-ViewModel (MVVM) to React with 3 simple @decorators",
+  "scripts": {
+    "build": "tsc",
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:cov": "jest --coverage --mapCoverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/osi-oswald/react-mvvm-decorators.git"
+  },
+  "keywords": [
+    "react",
+    "mvvm",
+    "decorators"
+  ],
+  "authors": [
+    "Patrick Oswald <osi.oswald@gmail.com> (https://github.com/osi-oswald)"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/osi-oswald/react-mvvm-decorators/issues"
+  },
+  "jest": {
+    "transform": {
+      "\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+      }
+    },
+    "testRegex": "\\.test\\.tsx?$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json"
+    ]
+  },
+  "dependencies": {
+    "@types/node": "^9.4.0",
+    "@types/prop-types": "^15.5.2",
+    "@types/react": "^16.0.35",
+    "@types/react-dom": "^16.0.3",
+    "prop-types": "^15.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "reflect-metadata": "^0.1.12",
+    "typescript": "^2.6.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^22.1.1",
+    "@types/pretty-format": "^20.0.0",
+    "@types/react-test-renderer": "^16.0.0",
+    "jest": "^22.1.4",
+    "pretty-format": "^22.1.0",
+    "react-test-renderer": "^16.2.0",
+    "ts-jest": "^22.0.2",
+    "tslint": "^5.9.1",
+    "tslint-react": "^3.4.0"
+  }
+}

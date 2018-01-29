@@ -1,0 +1,16 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`renders Counter component 1`] = `
+<div>
+  <p>
+    Count: 
+    2
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;
