@@ -5,10 +5,7 @@
     "module": "commonjs",
     "jsx": "react",
     "target": "es5",
-    "lib": [
-      "es6",
-      "dom"
-    ],
+    "lib": ["es6", "dom"],
     "sourceMap": true,
     "moduleResolution": "node",
     "strict": true,
@@ -19,8 +16,5 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "exclude": [
-    "node_modules",
-    "build",
-  ]
+  "exclude": ["node_modules", "build"]
 }
