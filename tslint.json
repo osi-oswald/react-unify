@@ -1,16 +1,11 @@
 {
-    "extends": ["tslint:latest"],
+    "extends": ["tslint:latest", "tslint-config-prettier"],
     "rules": {
-        "no-any": false,
         "interface-over-type-literal": false,
-        "quotemark": [true, "single", "jsx-double"],
         "no-unused-expression": [true, "allow-fast-null-checks"],
-        "space-before-function-paren": [true, {"anonymous": "always", "named": "never"}],
-        "max-line-length": false,
         "member-access": [true, "no-public"],
         "max-classes-per-file": false,
         "ban-types": false,
-        "trailing-comma": [true, "never"],
         "no-implicit-dependencies": [true, "dev"]
     }
 }

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {classOf, state as stateDecorator} from '../';
+import { classOf, state as stateDecorator } from '../';
 
 class TestComponent extends React.Component<{}, { myState }> {
   myState;
@@ -11,8 +11,7 @@ describe('@state', () => {
   let originalSetState: jest.SpyInstance;
 
   beforeEach(() => {
-    Component = class extends TestComponent {
-    };
+    Component = class extends TestComponent {};
     originalSetState = jest.spyOn(Component.prototype, 'setState');
     stateDecorator(Component.prototype, 'myState');
   });
@@ -24,7 +23,7 @@ describe('@state', () => {
   });
 
   describe('updating state', () => {
-    const update = {myState: 1};
+    const update = { myState: 1 };
     let component: TestComponent;
 
     beforeEach(() => {
@@ -58,18 +57,21 @@ describe('@state', () => {
         expect(originalSetState).toHaveBeenCalledWith(update);
       });
 
-      it('sets state via setState update object', (done) => {
+      it('sets state via setState update object', done => {
         component.setState(update, () => {
           expect(component.state.myState).toBe(update.myState);
           done();
         });
         expect(component.myState).toBe(update.myState);
         expect(component.state.myState).toBe(undefined);
-        expect(originalSetState).toHaveBeenCalledWith(update, expect.any(Function));
+        expect(originalSetState).toHaveBeenCalledWith(
+          update,
+          expect.any(Function)
+        );
       });
 
-      it('sets state via setState update function', (done) => {
-        const updateFn = (prevState) => update;
+      it('sets state via setState update function', done => {
+        const updateFn = prevState => update;
         component.setState(updateFn, () => {
           expect(component.myState).toBe(update.myState);
           expect(component.state.myState).toBe(update.myState);
@@ -77,7 +79,10 @@ describe('@state', () => {
         });
         expect(component.myState).toBe(undefined);
         expect(component.state.myState).toBe(undefined);
-        expect(originalSetState).toHaveBeenCalledWith(expect.any(Function), expect.any(Function));
+        expect(originalSetState).toHaveBeenCalledWith(
+          expect.any(Function),
+          expect.any(Function)
+        );
       });
     });
   });
@@ -85,16 +90,20 @@ describe('@state', () => {
 
 function newTestUpdater() {
   return {
-    enqueueSetState(instance: React.Component, update: null | {} | Function, callback: null | Function) {
+    enqueueSetState(
+      instance: React.Component,
+      update: null | {} | Function,
+      callback: null | Function
+    ) {
       if (update) {
         setTimeout(() => {
           if (typeof update === 'function') {
             update = update.call(instance, instance.state, instance.props);
           }
-          instance.state = {...instance.state, ...update};
+          instance.state = { ...instance.state, ...update };
           callback && callback();
         });
       }
-    },
+    }
   };
 }

@@ -25,18 +25,23 @@ export function prop<C extends React.Component>(prototype: C, propKey: string) {
       get(this: C) {
         const propVal = this.props[propKey];
         const defaultProps = constructor['defaultProps'];
-        return propVal !== undefined ? propVal : defaultProps && defaultProps[propKey];
+        return propVal !== undefined
+          ? propVal
+          : defaultProps && defaultProps[propKey];
       },
       set(value) {
         let defaultProps = constructor['defaultProps'];
         if (!defaultProps) {
           defaultProps = constructor['defaultProps'] = {};
         }
-        if (defaultProps[propKey] !== undefined && defaultProps[propKey] !== value) {
+        if (
+          defaultProps[propKey] !== undefined &&
+          defaultProps[propKey] !== value
+        ) {
           throw new Error(`can set default value only once: ${propKey}`);
         }
         defaultProps[propKey] = value;
-      },
+      }
     });
   }
 }

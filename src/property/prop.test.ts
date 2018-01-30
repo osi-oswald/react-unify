@@ -1,6 +1,6 @@
 // tslint:disable:no-string-literal
 import * as React from 'react';
-import {classOf, prop as propDecorator} from '../';
+import { classOf, prop as propDecorator } from '../';
 
 class TestComponent extends React.Component<{ myProp }> {
   myProp;
@@ -10,13 +10,12 @@ describe('@prop', () => {
   let Component: classOf<TestComponent>;
 
   beforeEach(() => {
-    Component = class extends TestComponent {
-    };
+    Component = class extends TestComponent {};
     propDecorator(Component.prototype, 'myProp');
   });
 
   it('gets prop', () => {
-    const component = new Component({myProp: 1});
+    const component = new Component({ myProp: 1 });
     expect(component.myProp).toBe(1);
   });
 
@@ -34,19 +33,19 @@ describe('@prop', () => {
 
   it('gets default prop from defaultProps', () => {
     const component = new Component({});
-    Component['defaultProps'] = {myProp: 1};
+    Component['defaultProps'] = { myProp: 1 };
     expect(component.myProp).toBe(1);
   });
 
   it('can not update default prop from initializer', () => {
     const component = new Component({});
     component.myProp = 1;
-    expect(() => component.myProp = 2).toThrow();
+    expect(() => (component.myProp = 2)).toThrow();
   });
 
   it('can not update default prop from defaultProps', () => {
     const component = new Component({});
-    Component['defaultProps'] = {myProp: 1};
-    expect(() => component.myProp = 2).toThrow();
+    Component['defaultProps'] = { myProp: 1 };
+    expect(() => (component.myProp = 2)).toThrow();
   });
 });

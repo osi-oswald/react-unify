@@ -26,9 +26,9 @@ import { classOf, prop, Rendered, state } from '../';
  */
 export function Render(render: (viewModel) => Rendered) {
   // tslint:disable-next-line:only-arrow-functions
-  return function (constructor: classOf<React.Component> & { Render?}) {
+  return function(constructor: classOf<React.Component> & { Render? }) {
     constructor.Render = render;
-    constructor.prototype.render = function () {
+    constructor.prototype.render = function() {
       return render(this);
     };
   };

@@ -21,14 +21,17 @@ const syncState = '@setState';
  *  - this.myState is updated synchronously
  *  - this.state.myState is updated asynchronously
  */
-export function state<C extends React.Component>(prototype: C, stateKey: string) {
+export function state<C extends React.Component>(
+  prototype: C,
+  stateKey: string
+) {
   if (!prototype[syncState]) {
     augmentSetState(prototype);
 
     prototype[syncState] = syncStateBeforeWillMount;
     const componentWillMount = prototype.componentWillMount;
 
-    prototype.componentWillMount = function (this: C) {
+    prototype.componentWillMount = function(this: C) {
       this[syncState] = syncStateAfterWillMount;
       componentWillMount && componentWillMount();
     };
@@ -43,14 +46,14 @@ export function state<C extends React.Component>(prototype: C, stateKey: string)
       },
       set(this: C, value) {
         this[syncState](stateKey, value);
-      },
+      }
     });
   }
 }
 
 function augmentSetState<C extends React.Component>(prototype: C) {
   const setState = prototype.setState;
-  prototype.setState = function (this: C, update, callback) {
+  prototype.setState = function(this: C, update, callback) {
     ensureState(this);
 
     if (typeof update === 'object') {
@@ -79,12 +82,20 @@ function ensureState<C extends React.Component>(component: C) {
   }
 }
 
-function syncStateBeforeWillMount<C extends React.Component>(this: C, key: string, value) {
+function syncStateBeforeWillMount<C extends React.Component>(
+  this: C,
+  key: string,
+  value
+) {
   ensureState(this);
   this[synchedState][key] = value;
   this.state[key] = value;
 }
 
-function syncStateAfterWillMount<C extends React.Component>(this: C, key: string, value) {
+function syncStateAfterWillMount<C extends React.Component>(
+  this: C,
+  key: string,
+  value
+) {
   this.setState({ [key]: value });
 }
