@@ -1,12 +1,14 @@
 # react-elevate
 
-Elevate state and props as component members to define a unified viewmodel and stateless render function.
+Elevate state and props to be a unified viewmodel for a stateless render function
 
 ## Example
 
 ### As single file
 
 ```jsx
+// --- Counter.jsx ---
+
 @Render(vm => (
   <div>
     <p>Count: {vm.count}</p>
@@ -16,13 +18,14 @@ Elevate state and props as component members to define a unified viewmodel and s
   </div>
 ))
 class Counter extends React.Component {
-  @prop amount = 1; // get this.props.amount, set its default value
+  @prop amount = 1; // access this.props.amount, define its default value
   @state count = 0; // access this.state.count in a synchronous manner
 
   increment() {
-    // calls setState() internally, therefore triggering a rerender
     this.count += this.amount;
-    // this.state.count might still be 0 by the async nature of setState()
+    // this.count is updated synchronously
+    // calls setState() internally, therefore triggering a rerender
+    // this.state.count might still be unchanged by the async nature of setState()
   }
 }
 ```
@@ -31,6 +34,7 @@ class Counter extends React.Component {
 
 ```jsx
 // --- CounterRender.jsx ---
+
 export const CounterRender = vm =>
   <div>
     <p>Count: {vm.count}</p>
@@ -55,7 +59,7 @@ class Counter extends React.Component {
 }
 ```
 
-Use `React.PureComponent` instead of `React.Component` for instant performance gains.
+Hint: Use `React.PureComponent` instead of `React.Component` for instant performance gains.
 
 ### Testing
 
@@ -74,7 +78,7 @@ test('Counter', () => {
 
 ## @state
 
-Access `this.state.someState` in a synchronous manner as component member `this.someState`. It will always update `this.state.someState` with `this.setState({someState: ...})` and never mutate it directly. Using `this.setState({someState: ...})` is no longer necessary, but it would update `this.someState` vice versa.
+Access `this.state.someState` in a synchronous manner as `this.someState`. It will  update `this.state.someState` eventually with `this.setState({someState: ...})` and never mutate it directly. Using `this.setState({someState: ...})` is no longer necessary, but it will update `this.someState` vice versa.
 
 ```js
 @state myPrimitive = 'myInitialState';
@@ -109,7 +113,7 @@ updateMyArray() {
 
 // do not use for React.PureComponent
 shouldComponentUpdate(nextProps, nextState) {
-  // use this.myState (or nextState.myState) to access next rendered state
+  // use this.myState to access next rendered state (or nextState.myState)
   // use this.state.myState to access current rendered state
   return this.myState !== this.state.myState;
 }
@@ -119,28 +123,25 @@ componentWillUpdate(nextProps, nextState) {
 }
 
 componentDidUpdate(prevProps, prevState) {
-  // use this.myState (or this.state.myState) to access current rendered state
-  // use prevState.myState to access previous rendered state
+  // use this.myState to access current rendered state (or this.state.myState)
 }
 ```
 
 ## @prop
 
-Access `this.props.someProp` as a component member `this.someProp` and initialize its default value if necessary.
+Access `this.props.someProp` as `this.someProp` and define its default value if necessary.
 
 ```js
 @prop myProp;
 @prop myPropWithDefault = 'myDefaultValue';
 
 componentWillReceiveProps(nextProps) {
-  // use this.myProp (or this.props.myProp) to access current prop
-  // use nextProps.myProp to access next prop
+  // use this.myProp to access current prop (or this.props.myProp)
 }
 
 // do not use for React.PureComponent
 shouldComponentUpdate(nextProps, nextState) {
-  // use this.myProp (or this.props.myProp) to access current prop
-  // use nextProps.myProp to access next prop
+  // use this.myProp to access current prop (or this.props.myProp)
   return this.myProp !== nextProps.myProp;
 }
 
@@ -149,16 +150,15 @@ componentWillUpdate(nextProps, nextState) {
 }
 
 componentDidUpdate(prevProps, prevState) {
-  // use this.myProp (or this.props.myProp) to access current prop
-  // use prevProps.myProp to access previous prop
+  // use this.myProp to access current prop (or this.props.myProp)
 }
 ```
 
-When using `@prop` to set a default value, it is recommended to always use `this.myProp` instead of `this.props.myProp`. `this.props.myProp` will not receive the default value until after the first render.
+Note: When using `@prop` to set a default value, it is recommended to always use `this.myProp` instead of `this.props.myProp`. `this.props.myProp` will not receive the default value set by `@prop` until after the first render, whereas `this.myProp` always does. Use `MyComponent.defaultProps.myProp` to set default values instead if this matters.
 
 ## @Render
 
-Sets `this.render` and `MyComponent.Render` as stateless render function with the component instance as input.
+Sets `this.render` and `MyComponent.Render` as stateless render function with the component instance as input/viewmodel.
 
 ```js
 @Render(MyComponentRender)
