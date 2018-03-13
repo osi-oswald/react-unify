@@ -3,7 +3,6 @@
 Elevate state and props as component members to define a unified viewmodel and stateless render function.
 
 ## Example
-Use `React.PureComponent` instead of `React.Component` for instant performance gains.
 
 ### As single file
 
@@ -17,7 +16,7 @@ Use `React.PureComponent` instead of `React.Component` for instant performance g
   </div>
 ))
 class Counter extends React.Component {
-  @prop amount = 1; // set default value, get this.props.amount
+  @prop amount = 1; // get this.props.amount, set its default value
   @state count = 0; // access this.state.count in a synchronous manner
 
   increment() {
@@ -55,6 +54,8 @@ class Counter extends React.Component {
   }
 }
 ```
+
+Use `React.PureComponent` instead of `React.Component` for instant performance gains.
 
 ### Testing
 
@@ -125,7 +126,7 @@ componentDidUpdate(prevProps, prevState) {
 
 ## @prop
 
-Access `this.props.someProp` as a component member `this.someProp` and initialize its default value once if necessary.
+Access `this.props.someProp` as a component member `this.someProp` and initialize its default value if necessary.
 
 ```js
 @prop myProp;
