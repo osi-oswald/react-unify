@@ -6,6 +6,7 @@
     "member-access": [true, "no-public"],
     "max-classes-per-file": false,
     "ban-types": false,
-    "no-implicit-dependencies": [true, "dev"]
+    "no-implicit-dependencies": [true, "dev"],
+    "no-console": [true, "log"]
   }
 }

@@ -24,7 +24,7 @@ describe('@prop', () => {
     expect(component.myProp).toBeUndefined();
   });
 
-  it('gets default prop from initializer', () => {
+  it('gets default prop from setter', () => {
     const component = new Component({});
     component.myProp = 1;
     expect(component.myProp).toBe(1);
@@ -35,17 +35,5 @@ describe('@prop', () => {
     const component = new Component({});
     Component['defaultProps'] = { myProp: 1 };
     expect(component.myProp).toBe(1);
-  });
-
-  it('can not update default prop from initializer', () => {
-    const component = new Component({});
-    component.myProp = 1;
-    expect(() => (component.myProp = 2)).toThrow();
-  });
-
-  it('can not update default prop from defaultProps', () => {
-    const component = new Component({});
-    Component['defaultProps'] = { myProp: 1 };
-    expect(() => (component.myProp = 2)).toThrow();
   });
 });

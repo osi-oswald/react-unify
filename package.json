@@ -29,11 +29,12 @@
   },
   "jest": {
     "transform": {
-      "\\.tsx?$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+      "^.+\\.tsx?$": "ts-jest"
     },
     "globals": {
       "ts-jest": {
-        "skipBabel": true
+        "skipBabel": true,
+        "tsConfigFile": "tsconfig.json"
       }
     },
     "testRegex": "\\.test\\.tsx?$",
@@ -42,31 +43,32 @@
       "tsx",
       "js",
       "jsx",
-      "json"
+      "json",
+      "node"
     ]
   },
   "dependencies": {
-    "@types/node": "^9.4.0",
+    "@types/node": "^9.6.0",
     "@types/prop-types": "^15.5.2",
-    "@types/react": "^16.0.35",
-    "@types/react-dom": "^16.0.3",
-    "prop-types": "^15.6.0",
+    "@types/react": "^16.0.41",
+    "@types/react-dom": "^16.0.4",
+    "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "reflect-metadata": "^0.1.12",
-    "typescript": "^2.6.2"
+    "typescript": "^2.7.2"
   },
   "devDependencies": {
-    "@types/jest": "^22.1.1",
+    "@types/jest": "^22.2.2",
     "@types/pretty-format": "^20.0.0",
-    "@types/react-test-renderer": "^16.0.0",
-    "jest": "^22.1.4",
-    "prettier": "^1.10.2",
-    "pretty-format": "^22.1.0",
+    "@types/react-test-renderer": "^16.0.1",
+    "jest": "^22.4.3",
+    "prettier": "^1.11.1",
+    "pretty-format": "^22.4.3",
     "react-test-renderer": "^16.2.0",
-    "ts-jest": "^22.0.2",
+    "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
-    "tslint-config-prettier": "^1.6.0",
-    "tslint-react": "^3.4.0"
+    "tslint-config-prettier": "^1.10.0",
+    "tslint-react": "^3.5.1"
   }
 }

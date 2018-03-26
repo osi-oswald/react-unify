@@ -19,27 +19,27 @@ import * as React from 'react';
 export function prop<C extends React.Component>(prototype: C, propKey: string) {
   if (delete prototype[propKey]) {
     const constructor = prototype.constructor as Function & { defaultProps };
+
     Object.defineProperty(prototype, propKey, {
       configurable: true,
       enumerable: true,
+
       get(this: C) {
         const propVal = this.props[propKey];
-        const defaultProps = constructor['defaultProps'];
-        return propVal !== undefined
-          ? propVal
-          : defaultProps && defaultProps[propKey];
+        const defaultProps = constructor.defaultProps;
+
+        return propVal === undefined
+          ? defaultProps && defaultProps[propKey]
+          : propVal;
       },
+
       set(value) {
-        let defaultProps = constructor['defaultProps'];
+        let defaultProps = constructor.defaultProps;
+
         if (!defaultProps) {
-          defaultProps = constructor['defaultProps'] = {};
+          defaultProps = constructor.defaultProps = {};
         }
-        if (
-          defaultProps[propKey] !== undefined &&
-          defaultProps[propKey] !== value
-        ) {
-          throw new Error(`can set default value only once: ${propKey}`);
-        }
+
         defaultProps[propKey] = value;
       }
     });
