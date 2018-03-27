@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const synchedState = '@state';
+const elevatedState = '@state';
 const syncState = '@setState';
 
 /**
@@ -26,60 +26,67 @@ export function state<C extends React.Component>(
   stateKey: string
 ) {
   if (!prototype[syncState]) {
-    augmentSetState(prototype);
-
-    prototype[syncState] = syncStateBeforeWillMount;
-    const componentWillMount = prototype.componentWillMount;
-
-    prototype.componentWillMount = function(this: C) {
-      this[syncState] = syncStateAfterWillMount;
-      componentWillMount && componentWillMount();
-    };
+    setupSyncState(prototype);
   }
 
   if (delete prototype[stateKey]) {
+    prototype[elevatedState][stateKey] = undefined;
+
     Object.defineProperty(prototype, stateKey, {
       configurable: true,
       enumerable: true,
+
       get(this: C) {
-        return this[synchedState] && this[synchedState][stateKey];
+        return this[elevatedState][stateKey];
       },
+
       set(this: C, value) {
+        if (this[elevatedState] === prototype[elevatedState]) {
+          this[elevatedState] = {};
+          this.state = this.state || {};
+        }
+
+        this[elevatedState][stateKey] = value;
         this[syncState](stateKey, value);
       }
     });
   }
 }
 
-function augmentSetState<C extends React.Component>(prototype: C) {
-  const setState = prototype.setState;
-  prototype.setState = function(this: C, update, callback) {
-    ensureState(this);
+function setupSyncState<C extends React.Component>(prototype: C) {
+  prototype[elevatedState] = {};
+  prototype[syncState] = syncStateBeforeWillMount;
 
-    if (typeof update === 'object') {
-      Object.assign(this[synchedState], update);
-    } else if (typeof update === 'function') {
-      const updateFn = update;
-      update = (prevState, props) => {
-        const partialState = updateFn(prevState, props);
-        Object.assign(this[synchedState], partialState);
-        return partialState;
-      };
-    }
-
-    if (callback) {
-      setState.call(this, update, callback);
-    } else {
-      setState.call(this, update);
-    }
+  const componentWillMount = prototype.componentWillMount;
+  prototype.componentWillMount = function(this: C) {
+    this[syncState] = syncStateAfterWillMount;
+    componentWillMount && componentWillMount.apply(this, arguments);
   };
+
+  if (
+    !process.env.NODE_ENV ||
+    process.env.NODE_ENV === 'development' ||
+    process.env.NODE_ENV === 'test'
+  ) {
+    checkStateOutOfSync(prototype);
+  }
 }
 
-function ensureState<C extends React.Component>(component: C) {
-  if (!component[synchedState]) {
-    component[synchedState] = {};
-    component.state = component.state || {};
-  }
+function checkStateOutOfSync<C extends React.Component>(prototype: C) {
+  const componentWillUpdate = prototype.componentWillUpdate;
+  prototype.componentWillUpdate = function(this: C, nextProps, nextState) {
+    for (const prop in this[elevatedState]) {
+      if (this[elevatedState][prop] !== nextState[prop]) {
+        console.error(
+          `elevated state '${prop}' was out of sync, always use 'this.${prop} = newValue' to update`
+        );
+
+        this[elevatedState][prop] = nextState[prop];
+      }
+    }
+
+    componentWillUpdate && componentWillUpdate.apply(this, arguments);
+  };
 }
 
 function syncStateBeforeWillMount<C extends React.Component>(
@@ -87,8 +94,6 @@ function syncStateBeforeWillMount<C extends React.Component>(
   key: string,
   value
 ) {
-  ensureState(this);
-  this[synchedState][key] = value;
   this.state[key] = value;
 }
 
