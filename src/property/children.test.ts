@@ -1,54 +1,54 @@
 import * as React from 'react';
 import { classOf } from '../utils';
-import { child as childDecorator } from './children';
+import { children as childrenDecorator } from './children';
 
 class TestComponent extends React.Component<{ children }> {
-  myChild;
+  myChildren;
 }
 
-describe('@child', () => {
+describe('@children', () => {
   let Component: classOf<TestComponent>;
 
   beforeEach(() => {
     Component = class extends TestComponent {};
   });
 
-  describe('single child', () => {
+  describe('all children', () => {
     beforeEach(() => {
-      childDecorator(Component.prototype, 'myChild');
+      childrenDecorator(Component.prototype, 'myChildren');
     });
 
-    it('gets child', () => {
+    it('gets children', () => {
       const component = new Component({ children: 'myChild' });
-      expect(component.myChild).toBe('myChild');
+      expect(component.myChildren).toEqual(['myChild']);
     });
 
     it('gets child from array', () => {
       const component = new Component({ children: ['myChild'] });
-      expect(component.myChild).toBe('myChild');
+      expect(component.myChildren).toEqual(['myChild']);
     });
 
     it('gets no child', () => {
       const component = new Component({});
-      expect(component.myChild).toBeUndefined();
+      expect(component.myChildren).toEqual([]);
     });
   });
 
-  describe('find child', () => {
+  describe('find children', () => {
     beforeEach(() => {
-      childDecorator(c => c === 'myChild')(Component.prototype, 'myChild');
+      childrenDecorator(c => c === 'myChild')(Component.prototype, 'myChildren');
     });
 
-    it('finds child from array', () => {
+    it('finds children from array', () => {
       const component = new Component({
         children: ['myOtherChild', 'myChild']
       });
-      expect(component.myChild).toBe('myChild');
+      expect(component.myChildren).toEqual(['myChild']);
     });
 
-    it('finds no child from array', () => {
+    it('finds no children from array', () => {
       const component = new Component({ children: ['myOtherChild'] });
-      expect(component.myChild).toBeUndefined();
+      expect(component.myChildren).toEqual([]);
     });
   });
 });

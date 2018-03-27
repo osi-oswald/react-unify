@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { classOf, state as stateDecorator } from '../';
+import { classOf } from '../utils';
+import { state as stateDecorator } from './state';
 
 class TestComponent extends React.Component<{}, { myState }> {
   myState;

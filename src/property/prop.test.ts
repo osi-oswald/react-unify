@@ -1,6 +1,7 @@
 // tslint:disable:no-string-literal
 import * as React from 'react';
-import { classOf, prop as propDecorator } from '../';
+import { classOf } from '../utils';
+import { prop as propDecorator } from './prop';
 
 class TestComponent extends React.Component<{ myProp }> {
   myProp;

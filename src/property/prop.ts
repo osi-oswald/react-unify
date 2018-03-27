@@ -3,11 +3,11 @@ import * as React from 'react';
 /**
  * Elevate `this.props.someProp` to `this.someProp` and set its default value if necessary.
  */
-export function prop<C extends React.Component>(prototype: C, key: string) {
-  if (delete prototype[key]) {
-    const constructor = prototype.constructor as Function & { defaultProps };
+export function prop<C extends React.Component>(target: C, key: string) {
+  if (delete target[key]) {
+    const constructor = target.constructor as Function & { defaultProps };
 
-    Object.defineProperty(prototype, key, {
+    Object.defineProperty(target, key, {
       configurable: true,
       enumerable: true,
 

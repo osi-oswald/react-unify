@@ -9,27 +9,27 @@ const useSetState = '@useSetState';
  * Changes to `this.state` from other sources will be synched back on `componentWillUpdate`.
  */
 export function state<C extends React.Component>(
-  prototype: C,
+  target: C,
   key: string
 ) {
-  if (prototype[useSetState] == null) {
-    prototype[useSetState] = false;
+  if (target[useSetState] == null) {
+    target[useSetState] = false;
 
-    const componentWillMount = prototype.componentWillMount;
-    prototype.componentWillMount = function(this: C) {
+    const componentWillMount = target.componentWillMount;
+    target.componentWillMount = function(this: C) {
       this[useSetState] = true;
       componentWillMount && componentWillMount.apply(this, arguments);
     };
 
-    const componentWillUpdate = prototype.componentWillUpdate;
-    prototype.componentWillUpdate = function(this: C, nextProps, nextState) {
+    const componentWillUpdate = target.componentWillUpdate;
+    target.componentWillUpdate = function(this: C, nextProps, nextState) {
       this[elevatedState] = nextState;
       componentWillUpdate && componentWillUpdate.apply(this, arguments);
     };
   }
 
-  if (delete prototype[key]) {
-    Object.defineProperty(prototype, key, {
+  if (delete target[key]) {
+    Object.defineProperty(target, key, {
       configurable: true,
       enumerable: true,
 

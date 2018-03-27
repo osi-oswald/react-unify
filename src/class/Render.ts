@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { classOf, Rendered } from '../';
+import { classOf, Rendered } from '../utils';
 
 /**
- * Sets `this.render` and `MyComponent.Render` as stateless render function 
+ * Sets `this.render` and `MyComponent.Render` as stateless render function
  * with the component instance as input / viewmodel.
  */
 export function Render(render: (viewModel) => Rendered) {
