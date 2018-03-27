@@ -77,7 +77,7 @@ test('Counter viewmodel', () => {
 
 ## @state
 
-Elevate `this.state.someState` to `this.someState` and access it synchronously. Will call `this.setState()` to update `this.state.someState` and trigger a rerender.
+Elevate `this.state.someState` to `this.someState` and access it synchronously. Will call `this.setState()` to update `this.state.someState` and trigger a rerender. Changes to `this.state` from other sources will be synched back on `componentWillUpdate`.
 
 ```js
 class MyComponent extends React.Component {
@@ -159,7 +159,7 @@ Note: When using `@prop` to set a default value, it is recommended to always use
 
 ## @Render
 
-Sets `this.render` and `MyComponent.Render` as stateless render function with the component instance as viewmodel/input.
+Sets `this.render` and `MyComponent.Render` as stateless render function with the component instance as input / viewmodel.
 
 ```js
 @Render(MyComponentRender)

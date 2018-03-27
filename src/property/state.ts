@@ -1,36 +1,23 @@
 import * as React from 'react';
 
 const elevatedState = '@state';
-const canSetState = '@canSetState';
+const useSetState = '@useSetState';
 
 /**
- * Allows to use this.myState instead of this.state.myState and can read/write to it synchronously (rerenders asynchronously).
- *
- * Examples:
- * @state myPrimitiveState: string = 'myInitialState'
- * @state myComplexState: Person = {name: 'Alice', age: 30}
- * myPrimitiveUpdate() { this.myPrimitiveState = 'newValue'; }
- * myComplexUpdate() { this.myComplexState = {...this.myComplexState, name: 'Bob'} }
- *
- * Optionally use with:
- * - PureComponent
- * - shouldComponentUpdate(nextProps) { return this.myPrimitiveState !== this.state.myPrimitiveState || this.myComplexState !== this.state.myComplexState }
- * - shouldComponentUpdate(nextProps, nextState) { return nextState.myPrimitiveState !== this.state.myPrimitiveState || nextState.myComplexState !== this.state.myComplexState }
- *
- * Note:
- *  - this.myState is updated synchronously
- *  - this.state.myState is updated asynchronously
+ * Elevate `this.state.someState` to `this.someState` and access it synchronously. 
+ * Will call `this.setState()` to update `this.state.someState` and trigger a rerender.
+ * Changes to `this.state` from other sources will be synched back on `componentWillUpdate`.
  */
 export function state<C extends React.Component>(
   prototype: C,
   stateKey: string
 ) {
-  if (prototype[canSetState] == null) {
-    prototype[canSetState] = false;
+  if (prototype[useSetState] == null) {
+    prototype[useSetState] = false;
 
     const componentWillMount = prototype.componentWillMount;
     prototype.componentWillMount = function(this: C) {
-      this[canSetState] = true;
+      this[useSetState] = true;
       componentWillMount && componentWillMount.apply(this, arguments);
     };
 
@@ -56,7 +43,7 @@ export function state<C extends React.Component>(
           this.state = this.state || {};
         }
 
-        if (this[canSetState]) {
+        if (this[useSetState]) {
           this.setState({ [stateKey]: value });
         } else {
           this.state[stateKey] = value;
