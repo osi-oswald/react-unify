@@ -47,12 +47,9 @@ describe('@state', () => {
     });
 
     describe('after componentWillMount', () => {
-      let consoleSpy: jest.SpyInstance<any>;
-
       beforeEach(() => {
         component.updater = newTestUpdater();
         component.componentWillMount!();
-        (consoleSpy = jest.spyOn(console, 'error')).mockImplementation(noop);
       });
 
       it('sets state via assignment', () => {
@@ -62,7 +59,7 @@ describe('@state', () => {
         expect(setState).toHaveBeenCalledWith(update);
       });
 
-      it('warns if state is out of sync', done => {
+      it('sets state from setState', done => {
         component.setState(update, () => {
           expect(component.myState).toBe(update.myState);
           expect(component.state.myState).toBe(update.myState);

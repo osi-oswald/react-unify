@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 const elevatedState = '@state';
-const syncState = '@setState';
+const canSetState = '@canSetState';
 
 /**
  * Allows to use this.myState instead of this.state.myState and can read/write to it synchronously (rerenders asynchronously).
@@ -25,82 +25,49 @@ export function state<C extends React.Component>(
   prototype: C,
   stateKey: string
 ) {
-  if (!prototype[syncState]) {
-    setupSyncState(prototype);
+  if (prototype[canSetState] == null) {
+    prototype[canSetState] = false;
+
+    const componentWillMount = prototype.componentWillMount;
+    prototype.componentWillMount = function(this: C) {
+      this[canSetState] = true;
+      componentWillMount && componentWillMount.apply(this, arguments);
+    };
+
+    const componentWillUpdate = prototype.componentWillUpdate;
+    prototype.componentWillUpdate = function(this: C, nextProps, nextState) {
+      this[elevatedState] = nextState;
+      componentWillUpdate && componentWillUpdate.apply(this, arguments);
+    };
   }
 
   if (delete prototype[stateKey]) {
-    prototype[elevatedState][stateKey] = undefined;
-
     Object.defineProperty(prototype, stateKey, {
       configurable: true,
       enumerable: true,
 
       get(this: C) {
-        return this[elevatedState][stateKey];
+        return this[elevatedState] && this[elevatedState][stateKey];
       },
 
       set(this: C, value) {
-        if (this[elevatedState] === prototype[elevatedState]) {
+        if (!this[elevatedState]) {
           this[elevatedState] = {};
           this.state = this.state || {};
         }
 
+        if (this[canSetState]) {
+          this.setState({ [stateKey]: value });
+        } else {
+          this.state[stateKey] = value;
+        }
+
+        if (this[elevatedState] === this.state) {
+          this[elevatedState] = { ...this[elevatedState] };
+        }
+
         this[elevatedState][stateKey] = value;
-        this[syncState](stateKey, value);
       }
     });
   }
-}
-
-function setupSyncState<C extends React.Component>(prototype: C) {
-  prototype[elevatedState] = {};
-  prototype[syncState] = syncStateBeforeWillMount;
-
-  const componentWillMount = prototype.componentWillMount;
-  prototype.componentWillMount = function(this: C) {
-    this[syncState] = syncStateAfterWillMount;
-    componentWillMount && componentWillMount.apply(this, arguments);
-  };
-
-  if (
-    !process.env.NODE_ENV ||
-    process.env.NODE_ENV === 'development' ||
-    process.env.NODE_ENV === 'test'
-  ) {
-    checkStateOutOfSync(prototype);
-  }
-}
-
-function checkStateOutOfSync<C extends React.Component>(prototype: C) {
-  const componentWillUpdate = prototype.componentWillUpdate;
-  prototype.componentWillUpdate = function(this: C, nextProps, nextState) {
-    for (const prop in this[elevatedState]) {
-      if (this[elevatedState][prop] !== nextState[prop]) {
-        console.error(
-          `elevated state '${prop}' was out of sync, always use 'this.${prop} = newValue' to update`
-        );
-
-        this[elevatedState][prop] = nextState[prop];
-      }
-    }
-
-    componentWillUpdate && componentWillUpdate.apply(this, arguments);
-  };
-}
-
-function syncStateBeforeWillMount<C extends React.Component>(
-  this: C,
-  key: string,
-  value
-) {
-  this.state[key] = value;
-}
-
-function syncStateAfterWillMount<C extends React.Component>(
-  this: C,
-  key: string,
-  value
-) {
-  this.setState({ [key]: value });
 }

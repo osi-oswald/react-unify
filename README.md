@@ -1,6 +1,6 @@
 # react-elevate
 
-Elevate state and props to form a unified viewmodel for a stateless component render function. Update/Read the elevated state synchronously (no need to call `this.setState()` manually).
+Elevate state and props to form a unified viewmodel for a stateless component render function. Update/Read the elevated state synchronously (no need to use `this.setState()` anymore).
 
 ## Example
 
@@ -57,18 +57,18 @@ class Counter extends React.Component {
 }
 ```
 
-### Hint
+### Tip
 Use `React.PureComponent` instead of `React.Component` for instant performance gains.
 
 ### Testing
 
 ```jsx
-test('CounterRender', () => {
+test('Counter render', () => {
   expect(CounterRender({ count: 0, amount: 1 })).toMatchSnapshot();
   // can also use Counter.Render set by @Render
 });
 
-test('Counter with default props', () => {
+test('Counter viewmodel', () => {
   const counter = new Counter({});
   counter.increment();
   expect(counter.count).toBe(1);
@@ -77,7 +77,7 @@ test('Counter with default props', () => {
 
 ## @state
 
-Elevate `this.state.someState` to `this.someState` and access it synchronously. It will update `this.state.someState` with `this.setState({someState: ...})` and never mutate it directly. // TODO Using `this.setState({someState: ...})` is no longer necessary, but it will update `this.someState` vice versa.
+Elevate `this.state.someState` to `this.someState` and access it synchronously. Will call `this.setState()` to update `this.state.someState` and trigger a rerender.
 
 ```js
 class MyComponent extends React.Component {
@@ -90,30 +90,27 @@ class MyComponent extends React.Component {
   }
 
   updateMyObject() {
-    // recommended: update object in an immutable manner (necessary for React.PureComponent)
+    // update object in an immutable manner (especially for React.PureComponent)
     this.myObject = {...this.myObject, name: 'Bob'};
 
-    // not recommended: mutate object directly -> will not trigger setState() and therefore not rerender
+    // avoid:
+    // mutate object directly -> will not trigger setState() and therefore not rerender
     this.myObject.name = 'Bob';
-
-    // will trigger setState(), but not rerender on React.PureComponent
-    this.myObject = this.myObject;
   }
 
   updateMyArray() {
-    // recommended: update array in an immutable manner (necessary for React.PureComponent)
+    // update array in an immutable manner (especially for React.PureComponent)
+    // checkout https://vincent.billey.me/pure-javascript-immutable-array/
     this.myArray = [...this.myArray, 3];
 
-    // not recommended: mutate array directly -> will not trigger setState() and therefore not rerender
+    // avoid:
+    // mutate array directly -> will not trigger setState() and therefore not rerender
     this.myArray.push(3);
-
-    // will trigger setState(), but not rerender on React.PureComponent
-    this.myArray = this.myArray;
   }
 
-  // careful when using React.PureComponent
+  // note: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
-    // use this.myState to access next rendered state (or nextState.myState)
+    // use this.myState to access next rendered state (equal to nextState.myState)
     // use this.state.myState to access current rendered state
     return this.myState !== this.state.myState;
   }
@@ -123,9 +120,10 @@ class MyComponent extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // use this.myState to access current rendered state (or this.state.myState)
+    // use this.myState to access current rendered state (equal to this.state.myState)
   }
 }
+
 ```
 
 ## @prop
@@ -138,12 +136,12 @@ class MyComponent extends React.Component {
   @prop myPropWithDefault = 'myDefaultValue';
   
   componentWillReceiveProps(nextProps) {
-    // use this.myProp to access current prop (or this.props.myProp)
+    // use this.myProp to access current prop (equal to this.props.myProp)
   }
   
-  // careful when using React.PureComponent
+  // note: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
-    // use this.myProp to access current prop (or this.props.myProp)
+    // use this.myProp to access current prop (equal to this.props.myProp)
     return this.myProp !== nextProps.myProp;
   }
   
@@ -152,12 +150,12 @@ class MyComponent extends React.Component {
   }
   
   componentDidUpdate(prevProps, prevState) {
-    // use this.myProp to access current prop (or this.props.myProp)
+    // use this.myProp to access current prop (equal to this.props.myProp)
   }
 }
 ```
 
-Note: When using `@prop` to set a default value, it is recommended to always use `this.myProp`. `this.props.myProp` will not receive the default value set by `@prop` until after the first render. Use `MyComponent.defaultProps.myProp` to set default values if this matters.
+Note: When using `@prop` to set a default value, it is recommended to always use `this.myProp`, since `this.props.myProp` will not receive the default value set by `@prop` until after the first render.
 
 ## @Render
 
