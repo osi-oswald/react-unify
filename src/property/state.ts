@@ -10,7 +10,7 @@ const useSetState = '@useSetState';
  */
 export function state<C extends React.Component>(
   prototype: C,
-  stateKey: string
+  key: string
 ) {
   if (prototype[useSetState] == null) {
     prototype[useSetState] = false;
@@ -28,13 +28,13 @@ export function state<C extends React.Component>(
     };
   }
 
-  if (delete prototype[stateKey]) {
-    Object.defineProperty(prototype, stateKey, {
+  if (delete prototype[key]) {
+    Object.defineProperty(prototype, key, {
       configurable: true,
       enumerable: true,
 
       get(this: C) {
-        return this[elevatedState] && this[elevatedState][stateKey];
+        return this[elevatedState] && this[elevatedState][key];
       },
 
       set(this: C, value) {
@@ -44,16 +44,16 @@ export function state<C extends React.Component>(
         }
 
         if (this[useSetState]) {
-          this.setState({ [stateKey]: value });
+          this.setState({ [key]: value });
         } else {
-          this.state[stateKey] = value;
+          this.state[key] = value;
         }
 
         if (this[elevatedState] === this.state) {
           this[elevatedState] = { ...this[elevatedState] };
         }
 
-        this[elevatedState][stateKey] = value;
+        this[elevatedState][key] = value;
       }
     });
   }

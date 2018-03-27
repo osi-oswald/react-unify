@@ -179,7 +179,7 @@ class MyComponent extends React.Component {
 ## @child / @children
 ```js
 class MyComponent extends React.Component {
-  @child myOnlyChild; // getter for React.Children.only(this.props.children)
+  @child myChild; // getter for React.Children.toArray(this.props.children)[0] || null
   @children allMyChildren; // getter for React.Children.toArray(this.props.children)
   
   @child(findChild) mySpecialChild; // getter for React.Children.toArray(this.props.children).find(findChild)
