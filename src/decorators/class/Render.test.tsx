@@ -9,6 +9,8 @@ import { prop, Render, state } from '../';
   </div>
 ))
 class Counter extends React.PureComponent<{ amount?: number }> {
+  static Render: (vm: Partial<Counter>) => any;
+
   @prop amount: number = 1;
   @state count: number = 0;
 
@@ -17,9 +19,15 @@ class Counter extends React.PureComponent<{ amount?: number }> {
   }
 }
 
-it('renders Counter component', () => {
-  const renderer = create(<Counter />);
-  renderer.root.findByType(Counter).instance.increment();
-  renderer.root.findByType('button').props.onClick();
-  expect(renderer).toMatchSnapshot();
+describe('@Render', () => {
+  it('renders Counter component', () => {
+    const renderer = create(<Counter />);
+    renderer.root.findByType(Counter).instance.increment();
+    renderer.root.findByType('button').props.onClick();
+    expect(renderer).toMatchSnapshot();
+  });
+
+  it('sets Counter.Render', () => {
+    expect(Counter.Render({ count: 0, amount: 1 })).toMatchSnapshot();
+  });
 });
