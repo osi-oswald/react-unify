@@ -1,6 +1,6 @@
 # react-elevate
 
-Elevate state and props to form a unified viewmodel for a stateless component render function. Update/Read the elevated state synchronously (no need to use `this.setState()` anymore).
+Elevate state and props to form a unified viewmodel for a stateless component render function. Update/Read the elevated state synchronously (no need to use `this.setState()`).
 
 ## Example
 
@@ -68,7 +68,7 @@ test('Counter render', () => {
   // can also use Counter.Render set by @Render
 });
 
-test('Counter viewmodel', () => {
+test('Counter as viewmodel', () => {
   const counter = new Counter({});
   counter.increment();
   expect(counter.count).toBe(1);
@@ -77,7 +77,7 @@ test('Counter viewmodel', () => {
 
 ## @state
 
-Elevate `this.state.someState` to `this.someState` and access it synchronously. Will call `this.setState()` to update `this.state.someState` and trigger a rerender. Changes to `this.state` from other sources will be synched back on `componentWillUpdate`.
+Elevate `this.state.someState` to `this.someState` and access it synchronously. Will call `this.setState()` to update `this.state.someState` and trigger a rerender. Changes to `this.state` from other sources will be synchronized back on `componentWillUpdate`.
 
 ```js
 class MyComponent extends React.Component {
@@ -100,12 +100,14 @@ class MyComponent extends React.Component {
 
   updateMyArray() {
     // update array in an immutable manner (especially for React.PureComponent)
-    // checkout https://vincent.billey.me/pure-javascript-immutable-array/
     this.myArray = [...this.myArray, 3];
 
     // avoid:
     // mutate array directly -> will not trigger setState() and therefore not rerender
     this.myArray.push(3);
+
+    // checkout:
+    // https://vincent.billey.me/pure-javascript-immutable-array/
   }
 
   // note: use React.PureComponent instead
@@ -155,11 +157,11 @@ class MyComponent extends React.Component {
 }
 ```
 
-Note: When using `@prop` to set a default value, it is recommended to always use `this.myProp`, since `this.props.myProp` will not receive the default value set by `@prop` until after the first render.
+Note: When using `@prop` to set a default value, always use `this.myProp` because `this.props.myProp` will not receive the default value set by `@prop` until after the first render.
 
 ## @Render
 
-Sets `this.render` and `MyComponent.Render` as stateless render function with the component instance as input / viewmodel.
+Sets `this.render` (and `MyComponent.Render`) as stateless render function with the component instance as input / viewmodel.
 
 ```js
 @Render(MyComponentRender)
