@@ -2,11 +2,10 @@ import * as React from 'react';
 
 const isInitialized = '@children:isInitialized';
 const childrenCache = '@children';
-const reactChildrenCache = '@React.Children';
 
 /**
- * (cached) getter for getter for `React.Children.toArray(this.props.children)[0]` or
- * (cached) getter for `React.Children.toArray(this.props.children).find(findChild)`
+ * (cached) getter for `React.Children.toArray(this.props.children)[0]`
+ * or `React.Children.toArray(this.props.children).find(findChild)`
  */
 export function child<C extends React.Component>(
   findChild?: (child, index: number, children) => boolean
@@ -22,7 +21,7 @@ function findReactChild(reactChildren: any[], findChild) {
 
 /**
  * (cached) getter for `React.Children.toArray(this.props.children)`
- * (cached) getter for `React.Children.toArray(this.props.children).filter(filterChildren)`
+ * or `React.Children.toArray(this.props.children).filter(filterChildren)`
  */
 export function children<C extends React.Component>(
   filterChildren?: (child, index: number, children) => boolean
@@ -47,9 +46,9 @@ function overloadedDecorator(
     return decorate(args[0], args[1], mapChildren);
   }
 
-  const findChild = args[0];
+  const predicate = args[0];
   return (target, key) => {
-    decorate(target, key, mapChildren, findChild);
+    decorate(target, key, mapChildren, predicate);
   };
 }
 
@@ -77,11 +76,11 @@ function decorate(
       get(this: React.Component) {
         if (!this[childrenCache]) {
           this[childrenCache] = {
-            [reactChildrenCache]: React.Children.toArray(this.props.children)
+            ['React.Children']: React.Children.toArray(this.props.children)
           };
         }
 
-        const reactChildren = this[childrenCache][reactChildrenCache];
+        const reactChildren = this[childrenCache]['React.Children'];
 
         let cached = this[childrenCache][key];
         if (!cached) {
