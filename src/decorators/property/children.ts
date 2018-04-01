@@ -1,8 +1,12 @@
 import * as React from 'react';
 
+const isInitialized = '@children:isInitialized';
+const childrenCache = '@children';
+const reactChildrenCache = '@React.Children';
+
 /**
- * getter for getter for `React.Children.toArray(this.props.children)[0]` or
- * getter for `React.Children.toArray(this.props.children).find(findChild)`
+ * (cached) getter for getter for `React.Children.toArray(this.props.children)[0]` or
+ * (cached) getter for `React.Children.toArray(this.props.children).find(findChild)`
  */
 export function child<C extends React.Component>(
   findChild?: (child, index: number, children) => boolean
@@ -17,8 +21,8 @@ function findReactChild(reactChildren: any[], findChild) {
 }
 
 /**
- * getter for `React.Children.toArray(this.props.children)`
- * getter for `React.Children.toArray(this.props.children).filter(filterChildren)`
+ * (cached) getter for `React.Children.toArray(this.props.children)`
+ * (cached) getter for `React.Children.toArray(this.props.children).filter(filterChildren)`
  */
 export function children<C extends React.Component>(
   filterChildren?: (child, index: number, children) => boolean
@@ -55,15 +59,39 @@ function decorate(
   mapChildren: (childrend: any[], predicate) => any,
   predicate?: (child, index: number, children) => boolean
 ) {
+  if (!target[isInitialized]) {
+    target[isInitialized] = true;
+
+    const componentWillReceiveProps = target.componentWillReceiveProps;
+    target.componentWillReceiveProps = function(this: React.Component) {
+      this[childrenCache] = undefined;
+      componentWillReceiveProps &&
+        componentWillReceiveProps.apply(this, arguments);
+    };
+  }
+
   if (delete target[key]) {
     Object.defineProperty(target, key, {
       configurable: true,
       enumerable: true,
       get(this: React.Component) {
-        return mapChildren(
-          React.Children.toArray(this.props.children),
-          predicate
-        );
+        if (!this[childrenCache]) {
+          this[childrenCache] = {
+            [reactChildrenCache]: React.Children.toArray(this.props.children)
+          };
+        }
+
+        const reactChildren = this[childrenCache][reactChildrenCache];
+
+        let cached = this[childrenCache][key];
+        if (!cached) {
+          cached = this[childrenCache][key] = mapChildren(
+            reactChildren,
+            predicate
+          );
+        }
+
+        return cached;
       }
     });
   }
