@@ -40,7 +40,7 @@ function filterReactChildren(reactChildren: any[], filterChildren) {
 
 function overloadedDecorator(
   args,
-  mapChildren: (childrend: any[], predicate) => any
+  mapChildren: (children: any[], predicate) => any
 ) {
   if (typeof args[0] === 'object') {
     return decorate(args[0], args[1], mapChildren);
@@ -55,7 +55,7 @@ function overloadedDecorator(
 function decorate(
   target,
   key: string,
-  mapChildren: (childrend: any[], predicate) => any,
+  mapChildren: (children: any[], predicate) => any,
   predicate?: (child, index: number, children) => boolean
 ) {
   if (!target[isInitialized]) {
@@ -73,6 +73,7 @@ function decorate(
     Object.defineProperty(target, key, {
       configurable: true,
       enumerable: true,
+
       get(this: React.Component) {
         if (!this[childrenCache]) {
           this[childrenCache] = {

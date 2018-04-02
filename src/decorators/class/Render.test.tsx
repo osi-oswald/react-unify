@@ -2,14 +2,16 @@ import * as React from 'react';
 import { create } from 'react-test-renderer';
 import { prop, Render, state } from '../';
 
-@Render((vm: Counter) => (
+@Render((counter: Counter) => (
   <div>
-    <p>Count: {vm.count}</p>
-    <button onClick={() => vm.increment()}>Increment by {vm.amount}</button>
+    <p>Count: {counter.count}</p>
+    <button onClick={() => counter.increment()}>
+      Increment by {counter.amount}
+    </button>
   </div>
 ))
-class Counter extends React.PureComponent<{ amount?: number }> {
-  static Render: (vm: Partial<Counter>) => any;
+class Counter extends React.Component<{ amount?: number }> {
+  static Render: (counter: Partial<Counter>) => any;
 
   @prop amount: number = 1;
   @state count: number = 0;

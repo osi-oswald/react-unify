@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { classOf } from '../utils';
 import { child as childDecorator } from './children';
 
-class TestComponent extends React.Component<{ children }> {
+class TestComponent extends React.Component<{ children? }> {
   myChild;
 }
 
 describe('@child', () => {
-  let Component: classOf<TestComponent>;
+  let Component: typeof TestComponent;
 
   beforeEach(() => {
     Component = class extends TestComponent {};

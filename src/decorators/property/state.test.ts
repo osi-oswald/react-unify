@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { classOf } from '../utils';
 import { state as stateDecorator } from './state';
 
 class TestComponent extends React.Component<{}, { myState }> {
@@ -8,7 +7,7 @@ class TestComponent extends React.Component<{}, { myState }> {
 }
 
 describe('@state', () => {
-  let Component: classOf<TestComponent>;
+  let Component: typeof TestComponent;
   let setState: jest.SpyInstance;
 
   beforeEach(() => {
@@ -28,7 +27,7 @@ describe('@state', () => {
     let component: TestComponent;
 
     beforeEach(() => {
-      component = new Component();
+      component = new Component({});
     });
 
     describe('before componentWillMount', () => {

@@ -1,13 +1,12 @@
 import * as React from 'react';
-import { classOf } from '../utils';
 import { children as childrenDecorator } from './children';
 
-class TestComponent extends React.Component<{ children }> {
+class TestComponent extends React.Component<{ children? }> {
   myChildren;
 }
 
 describe('@children', () => {
-  let Component: classOf<TestComponent>;
+  let Component: typeof TestComponent;
 
   beforeEach(() => {
     Component = class extends TestComponent {};
@@ -37,11 +36,22 @@ describe('@children', () => {
       const component = new Component({ children: 'myChild' });
       expect(component.myChildren).toBe(component.myChildren);
     });
+
+    it('recaches children', () => {
+      const component = new Component({ children: 'myChild' });
+      const myChildren = component.myChildren;
+      component.componentWillReceiveProps!(component.props, null);
+      expect(component.myChildren).not.toBe(myChildren);
+      expect(component.myChildren).toBe(component.myChildren);
+    });
   });
 
   describe('find children', () => {
     beforeEach(() => {
-      childrenDecorator(c => c === 'myChild')(Component.prototype, 'myChildren');
+      childrenDecorator(c => c === 'myChild')(
+        Component.prototype,
+        'myChildren'
+      );
     });
 
     it('finds children from array', () => {
@@ -54,11 +64,6 @@ describe('@children', () => {
     it('finds no children from array', () => {
       const component = new Component({ children: ['myOtherChild'] });
       expect(component.myChildren).toEqual([]);
-    });
-
-    it('caches children', () => {
-      const component = new Component({ children: 'myChild' });
-      expect(component.myChildren).toBe(component.myChildren);
     });
   });
 });

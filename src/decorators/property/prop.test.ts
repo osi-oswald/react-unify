@@ -1,14 +1,13 @@
 // tslint:disable:no-string-literal
 import * as React from 'react';
-import { classOf } from '../utils';
 import { prop as propDecorator } from './prop';
 
-class TestComponent extends React.Component<{ myProp }> {
-  myProp;
+class TestComponent extends React.Component<{ myProp? }> {
+  myProp?;
 }
 
 describe('@prop', () => {
-  let Component: classOf<TestComponent>;
+  let Component: typeof TestComponent;
 
   beforeEach(() => {
     Component = class extends TestComponent {};
