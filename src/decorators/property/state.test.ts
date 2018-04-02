@@ -7,8 +7,6 @@ class TestComponent extends React.Component<{}, { myState }> {
   updater;
 }
 
-const noop: (...args: any[]) => any = () => undefined;
-
 describe('@state', () => {
   let Component: classOf<TestComponent>;
   let setState: jest.SpyInstance;
@@ -49,7 +47,7 @@ describe('@state', () => {
 
     describe('after componentWillMount', () => {
       beforeEach(() => {
-        component.updater = newTestUpdater();
+        component.updater = testUpdater;
         component.componentWillMount!();
       });
 
@@ -69,27 +67,28 @@ describe('@state', () => {
         expect(component.myState).toBe(undefined);
         expect(component.state).toBe(undefined);
       });
+
+      it('does not mutate this.state', () => {
+        component.componentWillUpdate!(component.props, component.state, null);
+        component.myState = update.myState;
+        expect(component.myState).toBe(update.myState);
+        expect(component.state.myState).toBe(undefined);
+      });
     });
   });
 });
 
-function newTestUpdater() {
-  return {
-    enqueueSetState(
-      instance: React.Component,
-      update: null | {} | Function,
-      callback: null | Function
-    ) {
-      setTimeout(() => {
-        const nextState = { ...instance.state, ...update };
-
-        if (instance.componentWillUpdate) {
-          instance.componentWillUpdate(instance.props, nextState, null);
-        }
-
-        instance.state = nextState;
-        callback && callback();
-      });
-    }
-  };
-}
+const testUpdater = {
+  enqueueSetState(
+    instance: React.Component,
+    update: null | {} | Function,
+    callback: null | Function
+  ) {
+    setTimeout(() => {
+      const nextState = { ...instance.state, ...update };
+      instance.componentWillUpdate!(instance.props, nextState, null);
+      instance.state = nextState;
+      callback && callback();
+    });
+  }
+};

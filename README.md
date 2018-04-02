@@ -114,28 +114,28 @@ class MyComponent extends React.Component {
   }
 
   updateMyObject() {
-    // update the object in an immutable manner
+    // update objects in an immutable way
     this.myObject = {...this.myObject, name: 'Bob'};
 
-    // avoid mutating the object directly 
+    // avoid mutating objects directly 
     // -> will not trigger setState() and therefore not rerender
     this.myObject.name = 'Bob';
   }
 
   updateMyArray() {
-    // update the array in an immutable manner:
-    // https://vincent.billey.me/pure-javascript-immutable-array/
+    // update arrays in an immutable way
+    // see https://vincent.billey.me/pure-javascript-immutable-array/
     this.myArray = [...this.myArray, 3];
 
-    // avoid mutating the array directly 
+    // avoid mutating arrays directly 
     // -> will not trigger setState() and therefore not rerender
     this.myArray.push(3);
   }
 
   // note: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
-    // use this.myState (or nextState.myState) to access next state
-    // use this.state.myState to access current state
+    // use this.myState (or nextState.myState) to get next state
+    // use this.state.myState to get current state
     return this.myState !== this.state.myState;
   }
 
@@ -144,7 +144,7 @@ class MyComponent extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    // use this.myState to access current rendered state
+    // use this.myState (or this.state.myState) to get current state
   }
 }
 
@@ -160,42 +160,42 @@ class MyComponent extends React.Component {
   @prop myPropWithDefault = 'myDefaultValue';
   
   componentWillReceiveProps(nextProps) {
-    // use this.myProp to access current prop
+    // use this.myProp (or this.props.myProp) to get current prop
   }
   
   // note: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
-    // use this.myProp to access current prop
+    // same as in componentWillReceiveProps()
     return this.myProp !== nextProps.myProp;
   }
   
   componentWillUpdate(nextProps, nextState) {
-    // same as in shouldComponentUpdate()
+    // same as in componentWillReceiveProps()
   }
   
   componentDidUpdate(prevProps, prevState) {
-    // use this.myProp to access current prop
+    // same as in componentWillReceiveProps()
   }
 }
 ```
 
-Caveat: When using `@prop` to set a default value, always use `this.myProp`, `this.props.myProp` will not receive the default value set by `@prop` until after the first render. (Use `MyComponent.defaultProps.myProp` directly if this matters for you.)
+Caveat: When using `@prop` to set a default value, always use `this.myProp`. `this.props.myProp` will not receive the default value set by `@prop` until after the first render. (Set `MyComponent.defaultProps.myProp` directly if this matters for you.)
 
 ### @child / @children
-Specialized alternative to `@prop children`. Rename/Extract child(ren) from `this.props.children`, the result will be cached until next `componentWillReceiveProps()`.
+Specialized alternative to `@prop children`. Extract and name child(ren) from `this.props.children`, the result will be cached until next `componentWillReceiveProps()`.
 
 ```js
 class MyComponent extends React.Component {
-  // gets `React.Children.toArray(this.props.children)[0]`
+  // gets React.Children.toArray(this.props.children)[0]
   @child myChild;
 
-  // gets `React.Children.toArray(this.props.children)`
+  // gets React.Children.toArray(this.props.children)
   @children allMyChildren; 
   
-  // gets `React.Children.toArray(this.props.children).find(findChild)`
+  // gets React.Children.toArray(this.props.children).find(findChild)
   @child(findChild) mySpecialChild;
 
-  // gets `React.Children.toArray(this.props.children).filter(filterChildren)`
+  // gets React.Children.toArray(this.props.children).filter(filterChildren)
   @children(filterChildren) allMySpecialChildren; 
 }
 ```

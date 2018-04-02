@@ -23,7 +23,7 @@ export function state<C extends React.Component>(target: C, key: string) {
 
     const componentWillUpdate = target.componentWillUpdate;
     target.componentWillUpdate = function(this: C, nextProps, nextState) {
-      // synchronize back manual changes to this.state
+      // synchronize manual changes back to this.state
       this[synchronousState] = nextState;
       componentWillUpdate && componentWillUpdate.apply(this, arguments);
     };
@@ -40,18 +40,15 @@ export function state<C extends React.Component>(target: C, key: string) {
 
       set(this: C, value) {
         if (!this[synchronousState]) {
-          this[synchronousState] = {};
-          this.state = this.state || {};
+          this[synchronousState] = this.state = this.state || {};
         }
 
         if (this[useSetState]) {
           this.setState({ [key]: value });
-        } else {
-          this.state[key] = value;
-        }
 
-        if (this[synchronousState] === this.state) {
-          this[synchronousState] = { ...this.state };
+          if (this[synchronousState] === this.state) {
+            this[synchronousState] = { ...this.state };
+          }
         }
 
         this[synchronousState][key] = value;

@@ -23,14 +23,19 @@ describe('@children', () => {
       expect(component.myChildren).toEqual(['myChild']);
     });
 
-    it('gets child from array', () => {
+    it('gets children from array', () => {
       const component = new Component({ children: ['myChild'] });
       expect(component.myChildren).toEqual(['myChild']);
     });
 
-    it('gets no child', () => {
+    it('gets no children', () => {
       const component = new Component({});
       expect(component.myChildren).toEqual([]);
+    });
+
+    it('caches children', () => {
+      const component = new Component({ children: 'myChild' });
+      expect(component.myChildren).toBe(component.myChildren);
     });
   });
 
@@ -49,6 +54,11 @@ describe('@children', () => {
     it('finds no children from array', () => {
       const component = new Component({ children: ['myOtherChild'] });
       expect(component.myChildren).toEqual([]);
+    });
+
+    it('caches children', () => {
+      const component = new Component({ children: 'myChild' });
+      expect(component.myChildren).toBe(component.myChildren);
     });
   });
 });

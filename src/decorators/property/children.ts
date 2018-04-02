@@ -4,8 +4,8 @@ const isInitialized = '@children:isInitialized';
 const childrenCache = '@children';
 
 /**
- * (cached) getter for `React.Children.toArray(this.props.children)[0]`
- * or `React.Children.toArray(this.props.children).find(findChild)`
+ * (cached) getter for React.Children.toArray(this.props.children)[0]
+ * or React.Children.toArray(this.props.children).find(findChild)
  */
 export function child<C extends React.Component>(
   findChild?: (child, index: number, children) => boolean
@@ -20,8 +20,8 @@ function findReactChild(reactChildren: any[], findChild) {
 }
 
 /**
- * (cached) getter for `React.Children.toArray(this.props.children)`
- * or `React.Children.toArray(this.props.children).filter(filterChildren)`
+ * (cached) getter for React.Children.toArray(this.props.children)
+ * or React.Children.toArray(this.props.children).filter(filterChildren)
  */
 export function children<C extends React.Component>(
   filterChildren?: (child, index: number, children) => boolean
