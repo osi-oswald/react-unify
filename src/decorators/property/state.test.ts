@@ -16,10 +16,10 @@ describe('@state', () => {
     stateDecorator(Component.prototype, 'myState');
   });
 
-  it('augments componentWillMount only once', () => {
-    const componentWillMount = Component.prototype.componentWillMount;
+  it('augments componentWillUpdate only once', () => {
+    const componentWillUpdate = Component.prototype.componentWillUpdate;
     stateDecorator(Component.prototype, 'myOtherState');
-    expect(componentWillMount).toBe(Component.prototype.componentWillMount);
+    expect(componentWillUpdate).toBe(Component.prototype.componentWillUpdate);
   });
 
   describe('updating state', () => {
@@ -30,7 +30,7 @@ describe('@state', () => {
       component = new Component({});
     });
 
-    describe('before componentWillMount', () => {
+    describe('unmounted', () => {
       it('gets undefined state', () => {
         expect(component.myState).toBeUndefined();
         expect(component.state).toBeUndefined();
@@ -44,10 +44,9 @@ describe('@state', () => {
       });
     });
 
-    describe('after componentWillMount', () => {
+    describe('mounted', () => {
       beforeEach(() => {
-        component.updater = testUpdater;
-        component.componentWillMount!();
+        component.updater = mountedUpdater;
       });
 
       it('sets state via assignment', () => {
@@ -77,7 +76,10 @@ describe('@state', () => {
   });
 });
 
-const testUpdater = {
+const mountedUpdater = {
+  isMounted() {
+    return true;
+  },
   enqueueSetState(
     instance: React.Component,
     update: null | {} | Function,

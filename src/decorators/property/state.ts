@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 const isInitialized = '@state:isInitialized';
-const useSetState = '@state:useSetState';
 const synchronousState = '@state';
 
 /**
@@ -13,13 +12,6 @@ const synchronousState = '@state';
 export function state<C extends React.Component>(target: C, key: string) {
   if (!target[isInitialized]) {
     target[isInitialized] = true;
-
-    const componentWillMount = target.componentWillMount;
-    target.componentWillMount = function(this: C) {
-      // start using setState()
-      this[useSetState] = true;
-      componentWillMount && componentWillMount.apply(this, arguments);
-    };
 
     const componentWillUpdate = target.componentWillUpdate;
     target.componentWillUpdate = function(this: C, nextProps, nextState) {
@@ -43,7 +35,8 @@ export function state<C extends React.Component>(target: C, key: string) {
           this[synchronousState] = this.state = this.state || {};
         }
 
-        if (this[useSetState]) {
+        // tslint:disable:no-string-literal
+        if (this['updater'].isMounted(this)) {
           this.setState({ [key]: value });
 
           if (this[synchronousState] === this.state) {

@@ -1,0 +1,7 @@
+readme.md
+  how to enable decorators?
+  typescript example
+
+general
+  migrate to react 16.3
+  make codesandbox.io example
