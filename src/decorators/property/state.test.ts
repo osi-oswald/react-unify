@@ -16,10 +16,14 @@ describe('@state', () => {
     stateDecorator(Component.prototype, 'myState');
   });
 
-  it('augments componentWillUpdate only once', () => {
-    const componentWillUpdate = Component.prototype.componentWillUpdate;
+  it('initializes only once', () => {
+    const shouldComponentUpdate = Component.prototype.shouldComponentUpdate;
+    const forceUpdate = Component.prototype.forceUpdate;
     stateDecorator(Component.prototype, 'myOtherState');
-    expect(componentWillUpdate).toBe(Component.prototype.componentWillUpdate);
+    expect(shouldComponentUpdate).toBe(
+      Component.prototype.shouldComponentUpdate
+    );
+    expect(forceUpdate).toBe(Component.prototype.forceUpdate);
   });
 
   describe('updating state', () => {
@@ -67,10 +71,21 @@ describe('@state', () => {
       });
 
       it('does not mutate this.state', () => {
-        component.componentWillUpdate!(component.props, component.state, null);
+        component.shouldComponentUpdate!(
+          component.props,
+          component.state,
+          null
+        );
         component.myState = update.myState;
         expect(component.myState).toBe(update.myState);
         expect(component.state.myState).toBe(undefined);
+      });
+
+      it('sets state from mutation (ex React Developer Tools)', () => {
+        component.state = { myState: update.myState };
+        component.forceUpdate();
+        expect(component.myState).toBe(update.myState);
+        expect(component.state.myState).toBe(update.myState);
       });
     });
   });
@@ -87,9 +102,12 @@ const mountedUpdater = {
   ) {
     setTimeout(() => {
       const nextState = { ...instance.state, ...update };
-      instance.componentWillUpdate!(instance.props, nextState, null);
+      instance.shouldComponentUpdate!(instance.props, nextState, null);
       instance.state = nextState;
       callback && callback();
     });
+  },
+  enqueueForceUpdate(instance: React.Component, callback: null | Function) {
+    callback && callback();
   }
 };

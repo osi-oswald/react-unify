@@ -13,11 +13,16 @@ export function state<C extends React.Component>(target: C, key: string) {
   if (!target[isInitialized]) {
     target[isInitialized] = true;
 
-    const componentWillUpdate = target.componentWillUpdate;
-    target.componentWillUpdate = function(this: C, nextProps, nextState) {
-      // synchronize manual changes back to this.state
+    const scu = target.shouldComponentUpdate;
+    target.shouldComponentUpdate = function(this: C, nextProps, nextState) {
       this[synchronousState] = nextState;
-      componentWillUpdate && componentWillUpdate.apply(this, arguments);
+      return scu ? scu.apply(this, arguments) : true;
+    };
+
+    const forceUpdate = target.forceUpdate;
+    target.forceUpdate = function(this: C) {
+      this[synchronousState] = this.state;
+      forceUpdate && forceUpdate.apply(this, arguments);
     };
   }
 
