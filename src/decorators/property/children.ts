@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 const isInitialized = '@children:isInitialized';
+const lastProps = '@children:lastProps';
 const childrenCache = '@children';
 
 /**
@@ -61,12 +62,32 @@ function decorate(
   if (!target[isInitialized]) {
     target[isInitialized] = true;
 
-    const componentWillReceiveProps = target.componentWillReceiveProps;
-    target.componentWillReceiveProps = function(this: React.Component) {
-      this[childrenCache] = undefined;
-      componentWillReceiveProps &&
-        componentWillReceiveProps.apply(this, arguments);
-    };
+    const cWRP = target.componentWillReceiveProps;
+    const UcWRP = target.UNSAFE_componentWillReceiveProps;
+
+    if (cWRP) {
+      target.componentWillReceiveProps = function(this: React.Component) {
+        this[childrenCache] = undefined;
+        cWRP && cWRP.apply(this, arguments);
+      };
+    } else if (UcWRP) {
+      target.UNSAFE_componentWillReceiveProps = function(
+        this: React.Component
+      ) {
+        this[childrenCache] = undefined;
+        UcWRP && UcWRP.apply(this, arguments);
+      };
+    } else {
+      const sCU = target.shouldComponentUpdate;
+      target.shouldComponentUpdate = function(this, nextProps, nextState) {
+        if (this[lastProps] !== nextProps) {
+          this[childrenCache] = undefined;
+          this[lastProps] = nextProps;
+        }
+
+        return sCU ? sCU.apply(this, arguments) : true;
+      };
+    }
   }
 
   if (delete target[key]) {

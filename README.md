@@ -82,7 +82,8 @@ test('Counter instance', () => {
 
 ### @Render
 
-Assigns `this.render` (and `MyComponent.Render`) to a stateless render function with the component instance as input.
+Assigns `this.render` (and `MyComponent.Render`) to a stateless render function 
+with the component instance as input.
 
 ```js
 @Render(MyComponentRender)
@@ -101,7 +102,10 @@ class MyComponent extends React.Component {
 
 ### @state
 
-Elevate `this.state.someState` to `this.someState` and access it synchronously. Will call `this.setState()` for you to update `this.state.someState` and trigger a rerender. Changes to `this.state.someState` from other sources (including manual `this.setState()` calls) will be synchronized back to `this.someState` on `componentWillUpdate()`.
+Elevate `this.state.someState` to `this.someState` and access it synchronously.
+Will call `this.setState()` for you to update `this.state.someState` and trigger a rerender.
+Changes to `this.state.someState` from other sources (manual `this.setState()` / 'getDerivedStateFromProps()' / mutating 'this.state')
+will be synchronized back to `this.someState` before `shouldComponentUpdate()` or `forceUpdate()` respectively.
 
 ```js
 class MyComponent extends React.Component {
@@ -139,6 +143,7 @@ class MyComponent extends React.Component {
     return this.myState !== this.state.myState;
   }
 
+  // note: legacy lifecyle
   componentWillUpdate(nextProps, nextState) {
     // same as in shouldComponentUpdate()
   }
@@ -152,29 +157,32 @@ class MyComponent extends React.Component {
 
 ### @prop
 
-Elevate `this.props.someProp` to `this.someProp` and optionally define its default value whenever `someProp` is `undefined`.
+Elevate `this.props.someProp` to `this.someProp` and 
+optionally define its default value whenever `someProp` is `undefined`.
 
 ```js
 class MyComponent extends React.Component {
   @prop myProp;
   @prop myPropWithDefault = 'myDefaultValue';
   
+  // note: legacy lifecyle
   componentWillReceiveProps(nextProps) {
     // use this.myProp (or this.props.myProp) to get current prop
   }
   
   // note: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
-    // same as in componentWillReceiveProps()
+    // use this.myProp (or this.props.myProp) to get current prop
     return this.myProp !== nextProps.myProp;
   }
   
+  // note: legacy lifecyle
   componentWillUpdate(nextProps, nextState) {
-    // same as in componentWillReceiveProps()
+    // use this.myProp (or this.props.myProp) to get current prop
   }
   
   componentDidUpdate(prevProps, prevState) {
-    // same as in componentWillReceiveProps()
+    // use this.myProp (or this.props.myProp) to get current prop
   }
 }
 ```
@@ -182,7 +190,7 @@ class MyComponent extends React.Component {
 Caveat: When using `@prop` to set a default value, always use `this.myProp`. `this.props.myProp` will not receive the default value set by `@prop` until after the first render. (Set `MyComponent.defaultProps.myProp` directly if this matters for you.)
 
 ### @child / @children
-Specialized alternative to `@prop children`. Extract and name child(ren) from `this.props.children`, the result will be cached until next `componentWillReceiveProps()`.
+Specialized alternative to `@prop children`. Extract and name child(ren) from `this.props.children`, the result will be cached until next `shouldComponentUpdate()` with different `nextProps`.
 
 ```js
 class MyComponent extends React.Component {

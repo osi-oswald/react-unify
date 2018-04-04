@@ -40,7 +40,7 @@ describe('@children', () => {
     it('recaches children', () => {
       const component = new Component({ children: 'myChild' });
       const myChildren = component.myChildren;
-      component.componentWillReceiveProps!(component.props, null);
+      component.shouldComponentUpdate!(component.props, {}, null);
       expect(component.myChildren).not.toBe(myChildren);
       expect(component.myChildren).toBe(component.myChildren);
     });

@@ -6,23 +6,23 @@ const synchronousState = '@state';
 /**
  * Elevate `this.state.someState` to `this.someState` and access it synchronously.
  * Will call `this.setState()` for you to update `this.state.someState` and trigger a rerender.
- * Changes to `this.state.someState` from other sources (including manual `this.setState()` calls)
- * will be synchronized back to `this.someState` on `componentWillUpdate()`.
+ * Changes to `this.state.someState` from other sources (manual `this.setState()` / 'getDerivedStateFromProps()' / mutating 'this.state')
+ * will be synchronized back to `this.someState` before `shouldComponentUpdate()` or `forceUpdate()` respectively.
  */
 export function state<C extends React.Component>(target: C, key: string) {
   if (!target[isInitialized]) {
     target[isInitialized] = true;
 
-    const scu = target.shouldComponentUpdate;
+    const sCU = target.shouldComponentUpdate;
     target.shouldComponentUpdate = function(this: C, nextProps, nextState) {
       this[synchronousState] = nextState;
-      return scu ? scu.apply(this, arguments) : true;
+      return sCU ? sCU.apply(this, arguments) : true;
     };
 
-    const forceUpdate = target.forceUpdate;
+    const fU = target.forceUpdate;
     target.forceUpdate = function(this: C) {
       this[synchronousState] = this.state;
-      forceUpdate && forceUpdate.apply(this, arguments);
+      fU && fU.apply(this, arguments);
     };
   }
 
