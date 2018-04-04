@@ -1,7 +1,10 @@
 readme.md
   how to enable decorators?
+    in babel
+    in typescript
   typescript example
 
 general
-  migrate to react 16.3
   make codesandbox.io example
+    babel
+    typescript

@@ -17,13 +17,11 @@ describe('@state', () => {
   });
 
   it('initializes only once', () => {
-    const shouldComponentUpdate = Component.prototype.shouldComponentUpdate;
-    const forceUpdate = Component.prototype.forceUpdate;
+    const sCU = Component.prototype.shouldComponentUpdate;
+    const fU = Component.prototype.forceUpdate;
     stateDecorator(Component.prototype, 'myOtherState');
-    expect(shouldComponentUpdate).toBe(
-      Component.prototype.shouldComponentUpdate
-    );
-    expect(forceUpdate).toBe(Component.prototype.forceUpdate);
+    expect(sCU).toBe(Component.prototype.shouldComponentUpdate);
+    expect(fU).toBe(Component.prototype.forceUpdate);
   });
 
   describe('updating state', () => {

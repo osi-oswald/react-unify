@@ -29,3 +29,18 @@ exports[`@Render sets Counter.Render 1`] = `
   </button>
 </div>
 `;
+
+exports[`@Render updates from getDerivedStateFromProps 1`] = `
+<div>
+  <p>
+    Count: 
+    1
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;

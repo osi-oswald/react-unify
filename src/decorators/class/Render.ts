@@ -7,7 +7,7 @@ import * as React from 'react';
 export function Render<C extends React.Component>(
   render: (component) => React.ReactNode
 ) {
-  return (constructor: { Render?; new(...args: any[]): C }) => {
+  return (constructor: { Render?; new (...args: any[]): C }) => {
     constructor.Render = render;
     constructor.prototype.render = function() {
       return render(this);

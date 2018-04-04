@@ -136,6 +136,11 @@ class MyComponent extends React.Component {
     this.myArray.push(3);
   }
 
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // return new state based on nextProps and prevState
+    return { myState: nextProps.myProp };
+  }
+
   // note: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
     // use this.myState (or nextState.myState) to get next state
@@ -168,6 +173,11 @@ class MyComponent extends React.Component {
   // note: legacy lifecyle
   componentWillReceiveProps(nextProps) {
     // use this.myProp (or this.props.myProp) to get current prop
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    // return new state based on nextProps and prevState
+    return { myState: nextProps.myProp };
   }
   
   // note: use React.PureComponent instead

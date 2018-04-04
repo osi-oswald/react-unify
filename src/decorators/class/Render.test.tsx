@@ -10,10 +10,19 @@ import { prop, Render, state } from '../';
     </button>
   </div>
 ))
-class Counter extends React.Component<{ amount?: number }> {
+class Counter extends React.Component<{
+  amount?: number;
+  newCount?: number;
+}> {
   static Render: (counter: Partial<Counter>) => any;
 
+  static getDerivedStateFromProps(nextProps) {
+    const newCount = nextProps.newCount;
+    return newCount == null ? null : { count: newCount };
+  }
+
   @prop amount: number = 1;
+  @prop newCount!: number;
   @state count: number = 0;
 
   increment() {
@@ -26,6 +35,12 @@ describe('@Render', () => {
     const renderer = create(<Counter />);
     renderer.root.findByType(Counter).instance.increment();
     renderer.root.findByType('button').props.onClick();
+    expect(renderer).toMatchSnapshot();
+  });
+
+  it('updates from getDerivedStateFromProps', () => {
+    const renderer = create(<Counter />);
+    renderer.update(<Counter newCount={1} />);
     expect(renderer).toMatchSnapshot();
   });
 
