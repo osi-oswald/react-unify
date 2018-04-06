@@ -86,15 +86,6 @@ describe('@Render', () => {
     );
   });
 
-  it('@Render must be used on a React.Component class', () => {
-    expect(() => {
-      class SomeComponent extends React.Component<{ myProp? }> {
-        // @ts-ignore
-        @Render() someProp;
-      }
-    }).toThrow('@Render must be used on a React.Component class');
-  });
-
   it('sets Counter.Render', () => {
     expect(Counter.Render({ count: 0, amount: 1 })).toMatchSnapshot();
   });

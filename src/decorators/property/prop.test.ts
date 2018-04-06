@@ -36,15 +36,4 @@ describe('@prop', () => {
     Component['defaultProps'] = { myProp: 1 };
     expect(component.myProp).toBe(1);
   });
-
-  it('@prop must be used on a class property', () => {
-    expect(() => {
-      class SomeComponent extends React.Component<{ myProp? }> {
-        @propDecorator
-        someFunction() {
-          // ...
-        }
-      }
-    }).toThrow('@prop must be used on a class property');
-  });
 });

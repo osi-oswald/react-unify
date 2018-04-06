@@ -86,17 +86,6 @@ describe('@state', () => {
         expect(component.state.myState).toBe(update.myState);
       });
     });
-
-    it('@state must be used on a class property', () => {
-      expect(() => {
-        class SomeComponent extends React.Component<{ myProp? }> {
-          @stateDecorator
-          someFunction() {
-            // ...
-          }
-        }
-      }).toThrow('@state must be used on a class property');
-    });
   });
 });
 
