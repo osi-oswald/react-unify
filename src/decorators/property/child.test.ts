@@ -37,8 +37,10 @@ describe('@child', () => {
     childDecorator()(Component.prototype, 'myChild');
   });
 
-  it('does not work with invalid findChild', () => {
-    expect(() => childDecorator(false as any)(Component.prototype, 'myChildren')).toThrow();
+  it('parameter findChild must be a function', () => {
+    expect(() =>
+      childDecorator(false as any)(Component.prototype, 'myChildren')
+    ).toThrow('parameter findChild must be a function');
   });
 
   describe('find child', () => {

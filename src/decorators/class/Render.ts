@@ -7,7 +7,12 @@ import * as React from 'react';
 export function Render<C extends React.Component>(
   render: (component) => React.ReactNode
 ) {
-  return (constructor: { Render?; new (...args: any[]): C }) => {
+  // tslint:disable:only-arrow-functions
+  return function(constructor: { Render?; new (...args: any[]): C }) {
+    if (arguments[1]) {
+      throw new Error('@Render must be used on a React.Component class');
+    }
+
     if (typeof render !== 'function') {
       throw new Error('parameter render must be a function');
     }

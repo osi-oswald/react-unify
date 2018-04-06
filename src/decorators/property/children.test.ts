@@ -57,8 +57,10 @@ describe('@children', () => {
     childrenDecorator()(Component.prototype, 'myChildren');
   });
 
-  it('does not work with invalid filterChildren', () => {
-    expect(() => childrenDecorator(false as any)(Component.prototype, 'myChildren')).toThrow();
+  it('parameter filterChildren must be a function', () => {
+    expect(() =>
+      childrenDecorator(false as any)(Component.prototype, 'myChildren')
+    ).toThrow('parameter filterChildren must be a function');
   });
 
   describe('find children', () => {

@@ -10,6 +10,10 @@ const synchronousState = '@state';
  * will be synchronized back to `this.someState` before `shouldComponentUpdate()` or `forceUpdate()` respectively.
  */
 export function state<C extends React.Component>(target: C, key: string) {
+  if (arguments[2]) {
+    throw new Error('@state must be used on a class property');
+  }
+
   if (!target[isInitialized]) {
     target[isInitialized] = true;
 

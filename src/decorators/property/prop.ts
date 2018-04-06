@@ -5,6 +5,10 @@ import * as React from 'react';
  * optionally define its default value whenever `someProp` is `undefined`.
  */
 export function prop<C extends React.Component>(target: C, key: string) {
+  if (arguments[2]) {
+    throw new Error('@prop must be used on a class property');
+  }
+
   if (delete target[key]) {
     const constructor = target.constructor as Function & { defaultProps };
 

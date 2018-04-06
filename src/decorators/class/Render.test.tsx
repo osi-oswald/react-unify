@@ -12,13 +12,13 @@ import { prop, Render, state } from '../';
 ))
 class Counter extends React.Component<{
   amount?: number;
-  newCount?: number;
+  deriveCount?: number;
 }> {
   static Render: (counter: Partial<Counter>) => any;
 
   static getDerivedStateFromProps(nextProps) {
-    const newCount = nextProps.newCount;
-    return newCount == null ? null : { count: newCount };
+    const count = nextProps.deriveCount;
+    return count == null ? null : { count };
   }
 
   @prop amount: number = 1;
@@ -28,26 +28,50 @@ class Counter extends React.Component<{
   increment() {
     this.count += this.amount;
   }
+
+  incrementSetState() {
+    // @ts-ignore
+    this.setState({ count: this.state.count + this.amount });
+  }
+
+  incrementForceUpdate() {
+    // @ts-ignore
+    this.state.count += this.amount;
+    this.forceUpdate();
+  }
 }
 
 describe('@Render', () => {
-  it('renders Counter component', () => {
+  it('updates from @state', () => {
     const renderer = create(<Counter />);
     renderer.root.findByType(Counter).instance.increment();
-    renderer.root.findByType('button').props.onClick();
     expect(renderer).toMatchSnapshot();
   });
 
-  it('updates from getDerivedStateFromProps', () => {
+  it('updates from setState()', () => {
     const renderer = create(<Counter />);
-    renderer.update(<Counter newCount={1} />);
+    renderer.root.findByType(Counter).instance.incrementSetState();
+    expect(renderer).toMatchSnapshot();
+  });
+
+  it('updates from forceUpdate()', () => {
+    const renderer = create(<Counter />);
+    renderer.root.findByType(Counter).instance.incrementForceUpdate();
+    expect(renderer).toMatchSnapshot();
+  });
+
+  it('updates from getDerivedStateFromProps()', () => {
+    const renderer = create(<Counter />);
+    renderer.update(<Counter deriveCount={1} />);
     expect(renderer).toMatchSnapshot();
   });
 
   it('parameter render must be a function', () => {
     class MyComponent extends React.Component {}
 
-    expect(() => Render(null as any)(MyComponent)).toThrow();
+    expect(() => Render(null as any)(MyComponent)).toThrow(
+      'parameter render must be a function'
+    );
   });
 
   it('can not set Component.render() when using @Render', () => {
@@ -57,7 +81,18 @@ describe('@Render', () => {
       }
     }
 
-    expect(() => Render(() => null)(MyComponent)).toThrow();
+    expect(() => Render(() => null)(MyComponent)).toThrow(
+      'can not set Component.render() when using @Render'
+    );
+  });
+
+  it('@Render must be used on a React.Component class', () => {
+    expect(() => {
+      class SomeComponent extends React.Component<{ myProp? }> {
+        // @ts-ignore
+        @Render() someProp;
+      }
+    }).toThrow('@Render must be used on a React.Component class');
   });
 
   it('sets Counter.Render', () => {
