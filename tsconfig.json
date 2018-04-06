@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "rootDir": "src",
-    "outDir": "build",
+    "outDir": "lib",
     "module": "commonjs",
     "jsx": "react",
     "target": "es5",
@@ -16,5 +16,5 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "lib"]
 }

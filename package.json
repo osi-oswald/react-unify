@@ -1,7 +1,12 @@
 {
   "name": "react-unify",
   "version": "1.0.0",
-  "description": "Unify state and props, make component render stateless and get/set state synchronously",
+  "description": "Unify state and props, enabling stateless render() and synchronous state handling",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.js",
+  "files": [
+    "lib"
+  ],
   "scripts": {
     "build": "tsc",
     "format": "prettier --write src/**/*.{ts,tsx}",
@@ -25,9 +30,7 @@
     "stateless",
     "render"
   ],
-  "authors": [
-    "Patrick Oswald <osi.oswald@gmail.com> (https://github.com/osi-oswald)"
-  ],
+  "author": "Patrick Oswald <osi.oswald@gmail.com> (https://github.com/osi-oswald)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/osi-oswald/react-unify/issues"
@@ -52,17 +55,15 @@
       "node"
     ]
   },
-  "dependencies": {
-    "@types/node": "^9.6.2",
-    "@types/react": "^16.3.5",
-    "@types/react-dom": "^16.0.4",
-    "react": "^16.3.1",
-    "react-dom": "^16.3.1",
-    "reflect-metadata": "^0.1.12"
+  "peerDependencies": {
+    "react": "16.x.x"
   },
   "devDependencies": {
     "@types/jest": "^22.2.2",
+    "@types/node": "^9.6.2",
     "@types/pretty-format": "^20.0.0",
+    "@types/react": "^16.3.5",
+    "@types/react-dom": "^16.0.4",
     "@types/react-test-renderer": "^16.0.1",
     "jest": "^22.4.3",
     "prettier": "^1.11.1",
@@ -72,5 +73,7 @@
     "tslint-config-prettier": "^1.10.0",
     "tslint-react": "^3.5.1",
     "typescript": "^2.8.1"
-  }
+  },
+  "npmName": "react-unify",
+  "sideEffects": false
 }
