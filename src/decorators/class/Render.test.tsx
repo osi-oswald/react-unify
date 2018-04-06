@@ -44,6 +44,22 @@ describe('@Render', () => {
     expect(renderer).toMatchSnapshot();
   });
 
+  it('parameter render must be a function', () => {
+    class MyComponent extends React.Component {}
+
+    expect(() => Render(null as any)(MyComponent)).toThrow();
+  });
+
+  it('can not set Component.render() when using @Render', () => {
+    class MyComponent extends React.Component {
+      render() {
+        return null;
+      }
+    }
+
+    expect(() => Render(() => null)(MyComponent)).toThrow();
+  });
+
   it('sets Counter.Render', () => {
     expect(Counter.Render({ count: 0, amount: 1 })).toMatchSnapshot();
   });

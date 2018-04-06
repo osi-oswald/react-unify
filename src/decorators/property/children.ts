@@ -13,11 +13,11 @@ export function child<C extends React.Component>(
 ): (target: C, key: string) => void;
 export function child<C extends React.Component>(target: C, key: string): void;
 export function child<C extends React.Component>() {
-  return overloadedDecorator(arguments, findReactChild);
+  return overloadedDecorator(arguments, findChild);
 }
 
-function findReactChild(reactChildren: any[], findChild) {
-  return findChild ? reactChildren.find(findChild) : reactChildren[0];
+function findChild(reactChildren: any[], predicate) {
+  return predicate ? reactChildren.find(predicate) : reactChildren[0];
 }
 
 /**
@@ -32,11 +32,11 @@ export function children<C extends React.Component>(
   key: string
 ): void;
 export function children<C extends React.Component>() {
-  return overloadedDecorator(arguments, filterReactChildren);
+  return overloadedDecorator(arguments, filterChildren);
 }
 
-function filterReactChildren(reactChildren: any[], filterChildren) {
-  return filterChildren ? reactChildren.filter(filterChildren) : reactChildren;
+function filterChildren(reactChildren: any[], predicate) {
+  return predicate ? reactChildren.filter(predicate) : reactChildren;
 }
 
 function overloadedDecorator(
@@ -48,6 +48,10 @@ function overloadedDecorator(
   }
 
   const predicate = args[0];
+  if (predicate != null && typeof predicate !== 'function') {
+    throw new Error(`parameter ${mapChildren.name} must be a function`);
+  }
+
   return (target, key) => {
     decorate(target, key, mapChildren, predicate);
   };

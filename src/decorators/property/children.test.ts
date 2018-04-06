@@ -31,19 +31,34 @@ describe('@children', () => {
       const component = new Component({});
       expect(component.myChildren).toEqual([]);
     });
+  });
 
-    it('caches children', () => {
-      const component = new Component({ children: 'myChild' });
-      expect(component.myChildren).toBe(component.myChildren);
-    });
+  describe('caching', () => {
+    [
+      'componentWillReceiveProps',
+      'UNSAFE_componentWillReceiveProps',
+      'shouldComponentUpdate'
+    ].forEach(lifecycle => {
+      it(`invalidates cache on ${lifecycle}`, () => {
+        Component.prototype[lifecycle] = () => undefined;
+        childrenDecorator(Component.prototype, 'myChildren');
 
-    it('recaches children', () => {
-      const component = new Component({ children: 'myChild' });
-      const myChildren = component.myChildren;
-      component.shouldComponentUpdate!(component.props, {}, null);
-      expect(component.myChildren).not.toBe(myChildren);
-      expect(component.myChildren).toBe(component.myChildren);
+        const component = new Component({ children: 'myChild' });
+        const myChildren = component.myChildren;
+        expect(component.myChildren).toBe(myChildren);
+        component[lifecycle](component.props, {}, null);
+        expect(component.myChildren).not.toBe(myChildren);
+        expect(component.myChildren).toBe(component.myChildren);
+      });
     });
+  });
+
+  it('works without filterChildren', () => {
+    childrenDecorator()(Component.prototype, 'myChildren');
+  });
+
+  it('does not work with invalid filterChildren', () => {
+    expect(() => childrenDecorator(false as any)(Component.prototype, 'myChildren')).toThrow();
   });
 
   describe('find children', () => {

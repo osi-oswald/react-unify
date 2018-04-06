@@ -33,6 +33,14 @@ describe('@child', () => {
     });
   });
 
+  it('works without findChild', () => {
+    childDecorator()(Component.prototype, 'myChild');
+  });
+
+  it('does not work with invalid findChild', () => {
+    expect(() => childDecorator(false as any)(Component.prototype, 'myChildren')).toThrow();
+  });
+
   describe('find child', () => {
     beforeEach(() => {
       childDecorator(c => c === 'myChild')(Component.prototype, 'myChild');

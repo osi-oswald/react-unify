@@ -9,7 +9,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "test:cov": "jest --coverage"
+    "test:coverage": "jest --coverage"
   },
   "repository": {
     "type": "git",
@@ -55,11 +55,11 @@
   "dependencies": {
     "@types/node": "^9.6.2",
     "@types/prop-types": "^15.5.2",
-    "@types/react": "^16.3.4",
+    "@types/react": "^16.3.5",
     "@types/react-dom": "^16.0.4",
     "prop-types": "^15.6.1",
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
     "reflect-metadata": "^0.1.12"
   },
   "devDependencies": {
@@ -68,7 +68,7 @@
     "@types/react-test-renderer": "^16.0.1",
     "jest": "^22.4.3",
     "prettier": "^1.11.1",
-    "react-test-renderer": "^16.3.0",
+    "react-test-renderer": "^16.3.1",
     "ts-jest": "^22.4.2",
     "tslint": "^5.9.1",
     "tslint-config-prettier": "^1.10.0",
