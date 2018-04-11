@@ -26,31 +26,29 @@ export function state<C extends React.Component>(target: C, key: string) {
     };
   }
 
-  if (delete target[key]) {
-    Object.defineProperty(target, key, {
-      configurable: true,
-      enumerable: true,
+  Object.defineProperty(target, key, {
+    configurable: true,
+    enumerable: true,
 
-      get(this: C) {
-        return this[synchronousState] && this[synchronousState][key];
-      },
+    get(this: C) {
+      return this[synchronousState] && this[synchronousState][key];
+    },
 
-      set(this: C, value) {
-        if (!this[synchronousState]) {
-          this[synchronousState] = this.state = this.state || {};
-        }
-
-        // tslint:disable:no-string-literal
-        if (this['updater'].isMounted(this)) {
-          this.setState({ [key]: value });
-
-          if (this[synchronousState] === this.state) {
-            this[synchronousState] = { ...this.state };
-          }
-        }
-
-        this[synchronousState][key] = value;
+    set(this: C, value) {
+      if (!this[synchronousState]) {
+        this[synchronousState] = this.state = this.state || {};
       }
-    });
-  }
+
+      // tslint:disable:no-string-literal
+      if (this['updater'].isMounted(this)) {
+        this.setState({ [key]: value });
+
+        if (this[synchronousState] === this.state) {
+          this[synchronousState] = { ...this.state };
+        }
+      }
+
+      this[synchronousState][key] = value;
+    }
+  });
 }

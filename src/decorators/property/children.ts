@@ -94,30 +94,28 @@ function decorate(
     }
   }
 
-  if (delete target[key]) {
-    Object.defineProperty(target, key, {
-      configurable: true,
-      enumerable: true,
+  Object.defineProperty(target, key, {
+    configurable: true,
+    enumerable: true,
 
-      get(this: React.Component) {
-        if (!this[childrenCache]) {
-          this[childrenCache] = {
-            ['React.Children']: React.Children.toArray(this.props.children)
-          };
-        }
-
-        const reactChildren = this[childrenCache]['React.Children'];
-
-        let cached = this[childrenCache][key];
-        if (!cached) {
-          cached = this[childrenCache][key] = mapChildren(
-            reactChildren,
-            predicate
-          );
-        }
-
-        return cached;
+    get(this: React.Component) {
+      if (!this[childrenCache]) {
+        this[childrenCache] = {
+          ['React.Children']: React.Children.toArray(this.props.children)
+        };
       }
-    });
-  }
+
+      const reactChildren = this[childrenCache]['React.Children'];
+
+      let cached = this[childrenCache][key];
+      if (!cached) {
+        cached = this[childrenCache][key] = mapChildren(
+          reactChildren,
+          predicate
+        );
+      }
+
+      return cached;
+    }
+  });
 }

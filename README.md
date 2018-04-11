@@ -7,7 +7,7 @@ Unify state and props, decouple render() and update state synchronously (calling
 import * as React from "react";
 import { Render, prop, state } from 'react-unify';
 
-// decoupled and stateless render()
+// decoupled stateless render()
 @Render(counter => (
   <div>
     <p>Count: {counter.count}</p>
@@ -77,33 +77,34 @@ test('Counter instance', () => {
 });
 ```
 
-## Installation
+## Usage
 ```sh
 npm install react-unify
 ```
 
 ### Babel
-Enable decorators with [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
+Enable [decorators](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) and [class property initializer](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
 
 ```sh
-npm install --save-dev babel-plugin-transform-decorators-legacy
+npm install --save-dev babel-plugin-transform-decorators-legacy babel-plugin-transform-class-properties babel-preset-env babel-preset-react
 ```
 
 Add plugin to `.babelrc` file
 ```json
 {
-    "plugins": ["transform-decorators-legacy"]
+  "presets": ["env", "react"],
+  "plugins": ["transform-decorators-legacy", "transform-class-properties"]
 }
 ```
 
 ### TypeScript
-Enable decorators in `tsconfig.json` with [experimentalDecorators](http://www.typescriptlang.org/docs/handbook/decorators.html) compiler option
+Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with compiler option
 
 ```json
 {
-    "compilerOptions": {
-        "experimentalDecorators": true
-    }
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
 }
 ```
 
