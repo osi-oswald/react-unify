@@ -2,7 +2,7 @@ import * as React from 'react';
 import { create } from 'react-test-renderer';
 import { prop, Render, state } from '../';
 
-@Render((counter: Counter) => (
+@Render(counter => (
   <div>
     <p>Count: {counter.count}</p>
     <button onClick={() => counter.increment()}>
@@ -10,32 +10,25 @@ import { prop, Render, state } from '../';
     </button>
   </div>
 ))
-class Counter extends React.Component<{
-  amount?: number;
-  deriveCount?: number;
-}> {
-  static Render: (counter: Partial<Counter>) => any;
-
+class Counter extends React.Component {
   static getDerivedStateFromProps(nextProps) {
     const count = nextProps.deriveCount;
     return count == null ? null : { count };
   }
 
-  @prop newCount!: number;
-  @prop amount: number = 1;
-  @state count: number = 0;
+  @prop newCount;
+  @prop amount = 1;
+  @state count = 0;
 
   increment() {
     this.count += this.amount;
   }
 
   incrementSetState() {
-    // @ts-ignore
     this.setState({ count: this.state.count + this.amount });
   }
 
   incrementForceUpdate() {
-    // @ts-ignore
     this.state.count += this.amount;
     this.forceUpdate();
   }
@@ -69,7 +62,7 @@ describe('@Render', () => {
   it('parameter render must be a function', () => {
     class MyComponent extends React.Component {}
 
-    expect(() => Render(null as any)(MyComponent)).toThrow(
+    expect(() => Render(null)(MyComponent)).toThrow(
       'parameter render must be a function'
     );
   });
