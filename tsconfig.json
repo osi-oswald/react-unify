@@ -13,8 +13,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noImplicitAny": false,
     "declaration": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "experimentalDecorators": true
   },
   "exclude": ["node_modules", "lib"]
 }

@@ -1,9 +1,9 @@
 {
   "name": "react-unify",
-  "version": "1.0.1",
-  "description": "Unify state and props, enabling stateless render() and synchronous state handling",
-  "main": "lib/index.js",
-  "typings": "lib/index.d.js",
+  "version": "1.0.2",
+  "description": "Unify state and props, decouple render() and update state synchronously",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "files": [
     "lib"
   ],

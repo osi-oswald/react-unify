@@ -1,25 +1,21 @@
 # react-unify 💍
-* Unify state and props inside the component
-* Make component render stateless and testable
-* Get/set state synchronously (calls `setState()` for you)
-
-## Installation
-```sh
-npm install react-unify
-```
+Unify state and props, decouple render() and update state synchronously (calling `setState()` for you)
 
 ## Basic Example
 
 ```jsx
-// stateless component render
-@Render(counter => 
+import * as React from "react";
+import { Render, prop, state } from 'react-unify';
+
+// decoupled and stateless render()
+@Render(counter => (
   <div>
     <p>Count: {counter.count}</p>
     <button onClick={() => counter.increment()}>
       Increment by {counter.amount}
     </button>
   </div>
-)
+))
 export class Counter extends React.Component {
   @prop amount = 1; // gets this.props.amount, sets defaultProps.amount
   @state count = 0; // access this.state.count in a synchronous way
@@ -37,17 +33,20 @@ export class Counter extends React.Component {
 
 ```jsx
 // --- CounterRender.jsx ---
-export const CounterRender = counter =>
+export const CounterRender = counter => (
   <div>
     <p>Count: {counter.count}</p>
     <button onClick={() => counter.increment()}>
       Increment by {counter.amount}
     </button>
   </div>
+);
 ```
 
 ```jsx
 // --- Counter.js ---
+import * as React from "react";
+import { Render, prop, state } from 'react-unify';
 import { CounterRender } from './CounterRender';
 
 @Render(CounterRender)
@@ -77,6 +76,43 @@ test('Counter instance', () => {
   expect(counter.count).toBe(1);
 });
 ```
+
+## Installation
+```sh
+npm install react-unify
+```
+
+### Babel
+Enable decorators with [babel-plugin-transform-decorators-legacy](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy)
+
+```sh
+npm install --save-dev babel-plugin-transform-decorators-legacy
+```
+
+Add plugin to `.babelrc` file
+```json
+{
+    "plugins": ["transform-decorators-legacy"]
+}
+```
+
+### TypeScript
+Enable decorators in `tsconfig.json` with [experimentalDecorators](http://www.typescriptlang.org/docs/handbook/decorators.html) compiler option
+
+```json
+{
+    "compilerOptions": {
+        "experimentalDecorators": true
+    }
+}
+```
+
+### CodeSandbox
+Add `react-unify` as dependency, decorators are enabled by default :-)
+
+* [JavaScript playground](https://codesandbox.io/s/wnyzll2x1w)
+* [TypeScript playground](https://codesandbox.io/s/momx88y1wy)
+
 
 ## API
 
