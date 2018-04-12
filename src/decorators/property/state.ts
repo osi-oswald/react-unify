@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-const isInitialized = '@state:isInitialized';
+const isInitialized = '@state:initialized';
 const synchronousState = '@state';
 
 /**
@@ -9,7 +9,24 @@ const synchronousState = '@state';
  * Changes to `this.state.someState` from other sources (manual `this.setState()` / 'getDerivedStateFromProps()' / mutating 'this.state')
  * will be synchronized back to `this.someState` before `shouldComponentUpdate()` or `forceUpdate()` respectively.
  */
-export function state<C extends React.Component>(target: C, key: string) {
+export function state<C extends React.Component>(
+  target: C,
+  key: string,
+  descriptor?: PropertyDescriptor & { initializer? }
+): void {
+  initOnce(target);
+
+  const stateDescriptior: typeof descriptor = descriptorFor(key);
+
+  Object.defineProperty(target, key, stateDescriptior);
+
+  if (descriptor && descriptor.initializer) {
+    stateDescriptior.initializer = descriptor.initializer;
+    return stateDescriptior as any;
+  }
+}
+
+function initOnce<C extends React.Component>(target: C) {
   if (!target[isInitialized]) {
     target[isInitialized] = true;
 
@@ -25,15 +42,17 @@ export function state<C extends React.Component>(target: C, key: string) {
       fU && fU.apply(this, arguments);
     };
   }
+}
 
-  Object.defineProperty(target, key, {
+function descriptorFor<C extends React.Component>(
+  key: string
+): PropertyDescriptor {
+  return {
     configurable: true,
     enumerable: true,
-
     get(this: C) {
       return this[synchronousState] && this[synchronousState][key];
     },
-
     set(this: C, value) {
       if (!this[synchronousState]) {
         this[synchronousState] = this.state = this.state || {};
@@ -50,5 +69,5 @@ export function state<C extends React.Component>(target: C, key: string) {
 
       this[synchronousState][key] = value;
     }
-  });
+  };
 }

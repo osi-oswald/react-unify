@@ -1,6 +1,6 @@
 {
   "name": "react-unify",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Unify state and props, decouple render() and update state synchronously",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write src/**/*.{ts,tsx}",
+    "format": "prettier --write src/**/*.{ts,tsx,js,jsx}",
     "format:check": "prettier --list-different src/**/*.{ts,tsx}",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "test": "jest",
@@ -22,7 +22,7 @@
   },
   "keywords": [
     "react",
-    "decorator",
+    "decorators",
     "synchronous",
     "state",
     "prop",
@@ -46,7 +46,7 @@
         "tsConfigFile": "tsconfig.json"
       }
     },
-    "testRegex": "\\.test\\.(t|j)sx?$",
+    "testRegex": "\\.test\\.(j|t)sx?$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -69,7 +69,7 @@
     "babel-core": "6.26.0",
     "babel-jest": "^22.4.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-plugin-transform-decorators-ts-compat": "^1.3.7",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "jest": "^22.4.3",

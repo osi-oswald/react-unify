@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { create } from 'react-test-renderer';
-import { prop, Render, state } from '../';
+import { child, children, prop, Render, state } from '../';
 
 @Render((counter: Counter) => (
   <div>
@@ -24,6 +24,8 @@ class Counter extends React.Component<{
   @prop newCount!: number;
   @prop amount: number = 1;
   @state count: number = 0;
+  @child myChild;
+  @children myChildren;
 
   increment() {
     this.count += this.amount;
@@ -64,6 +66,23 @@ describe('@Render', () => {
     const renderer = create(<Counter />);
     renderer.update(<Counter deriveCount={1} />);
     expect(renderer).toMatchSnapshot();
+  });
+
+  it('has myChild', () => {
+    const renderer = create(<Counter>my child</Counter>);
+    const counter: Counter = renderer.getInstance() as any;
+    expect(counter.myChild).toEqual('my child');
+  });
+
+  it('has myChildren', () => {
+    const renderer = create(
+      <Counter>
+        <i>child 1</i>
+        <i>child 2</i>
+      </Counter>
+    );
+    const counter: Counter = renderer.getInstance() as any;
+    expect(counter.myChildren).toMatchSnapshot();
   });
 
   it('parameter render must be a function', () => {

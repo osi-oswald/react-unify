@@ -1,5 +1,5 @@
 # react-unify 💍
-Unify state and props, decouple render() and update state synchronously (calling `setState()` for you)
+Unify state and props, decouple `render()` and update state synchronously (calling `setState()` for you)
 
 ## Basic Example
 
@@ -29,37 +29,6 @@ export class Counter extends React.Component {
 }
 ```
 
-### As separate files
-
-```jsx
-// --- CounterRender.jsx ---
-export const CounterRender = counter => (
-  <div>
-    <p>Count: {counter.count}</p>
-    <button onClick={() => counter.increment()}>
-      Increment by {counter.amount}
-    </button>
-  </div>
-);
-```
-
-```jsx
-// --- Counter.js ---
-import * as React from "react";
-import { Render, prop, state } from 'react-unify';
-import { CounterRender } from './CounterRender';
-
-@Render(CounterRender)
-class Counter extends React.Component {
-  @prop amount = 1;
-  @state count = 0;
-
-  increment() {
-    this.count += this.amount;
-  }
-}
-```
-
 Tip: Use `React.PureComponent` instead of `React.Component` for instant performance gains.
 
 ### Testing
@@ -77,23 +46,23 @@ test('Counter instance', () => {
 });
 ```
 
-## Usage
+## Installation
 ```sh
 npm install react-unify
 ```
 
 ### Babel
-Enable [decorators](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) and [class property initializer](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
+Enable [decorators](https://github.com/osi-oswald/babel-plugin-transform-decorators-ts-compat) and [class property initializer](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
 
 ```sh
-npm install --save-dev babel-plugin-transform-decorators-legacy babel-plugin-transform-class-properties babel-preset-env babel-preset-react
+npm install --save-dev babel-plugin-transform-decorators-ts-compat babel-plugin-transform-class-properties babel-preset-env babel-preset-react
 ```
 
 Add plugin to `.babelrc` file
 ```json
 {
   "presets": ["env", "react"],
-  "plugins": ["transform-decorators-legacy", "transform-class-properties"]
+  "plugins": ["transform-decorators-ts-compat", "transform-class-properties"]
 }
 ```
 
@@ -109,7 +78,7 @@ Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html)
 ```
 
 ### CodeSandbox
-Add `react-unify` as dependency, decorators are enabled by default :-)
+Add `react-unify` as dependency, decorators are supported by default :-)
 
 * [JavaScript playground](https://codesandbox.io/s/wnyzll2x1w)
 * [TypeScript playground](https://codesandbox.io/s/momx88y1wy)
@@ -178,7 +147,7 @@ class MyComponent extends React.Component {
     return { myState: nextProps.myProp };
   }
 
-  // note: use React.PureComponent instead
+  // recommended: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
     // use this.myState (or nextState.myState) to get next state
     // use this.state.myState to get current state
@@ -217,7 +186,7 @@ class MyComponent extends React.Component {
     return { myState: nextProps.myProp };
   }
   
-  // note: use React.PureComponent instead
+  // recommended: use React.PureComponent instead
   shouldComponentUpdate(nextProps, nextState) {
     // use this.myProp (or this.props.myProp) to get current prop
     return this.myProp !== nextProps.myProp;
