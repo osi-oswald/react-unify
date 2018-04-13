@@ -130,7 +130,7 @@ Add plugins to `.babelrc` file
 ```
 
 ### TypeScript
-Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *class field initialization* are enabled by default
+Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *class field initialization* is enabled by default
 
 ```json
 {
