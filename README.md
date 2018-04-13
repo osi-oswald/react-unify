@@ -1,7 +1,7 @@
 # react-unify 💍
 Unify state and props, decouple `render()` and update state synchronously (calling `setState()` for you)
 
-## Basic Example
+## Basic Examples
 
 ### With [decorators](https://github.com/tc39/proposal-decorators#decorators) and [class field initialization](https://github.com/tc39/proposal-class-fields#field-declarations)
 
@@ -173,8 +173,8 @@ class MyComponent extends React.Component {
 
 Elevate `this.state.someState` to `this.someState` and access it synchronously.
 Will call `this.setState()` for you to update `this.state.someState` and trigger a rerender.
-Changes to `this.state.someState` from other sources (manual `this.setState()` / 'getDerivedStateFromProps()' / mutating 'this.state')
-will be synchronized back to `this.someState` before `shouldComponentUpdate()` or `forceUpdate()` respectively.
+Changes to `this.state.someState` from other sources (manual `this.setState()` / `getDerivedStateFromProps()` / mutating `this.state`)
+will be synchronized back to `this.someState` before `shouldComponentUpdate()` or on `forceUpdate()` respectively.
 
 ```js
 class MyComponent extends React.Component {
