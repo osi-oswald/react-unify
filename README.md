@@ -3,6 +3,8 @@ Unify state and props, decouple `render()` and update state synchronously (calli
 
 ## Basic Example
 
+### With [Decorators](https://github.com/tc39/proposal-decorators#decorators) and [Class field initializers](https://github.com/tc39/proposal-class-fields#field-declarations)
+
 ```jsx
 import * as React from "react";
 import { Render, prop, state } from 'react-unify';
@@ -24,12 +26,73 @@ export class Counter extends React.Component {
     this.count += this.amount;
     // this.count is updated synchronously
     // calls setState() for you, triggering a rerender
-    // this.state.count gets updated asynchronously
+    // (this.state.count gets updated asynchronously)
   }
 }
 ```
 
-Tip: Use `React.PureComponent` instead of `React.Component` for instant performance gains.
+#### Optionally extract stateless render
+```jsx
+// CounterRender.jsx
+export const CounterRender = counter => (
+  <div>
+    <p>Count: {counter.count}</p>
+    <button onClick={() => counter.increment()}>
+      Increment by {counter.amount}
+    </button>
+  </div>
+);
+```
+
+
+### Without [Decorators](https://github.com/tc39/proposal-decorators#decorators)
+```jsx
+import * as React from "react";
+import { Render, prop, state } from 'react-unify';
+import { CounterRender } from './CounterRender';
+
+export class Counter extends React.Component {
+  amount = 1;
+  count = 0;
+
+  increment() {
+    this.count += this.amount;
+  }
+}
+
+// manually applying decorators
+Render(CounterRender)(Counter);
+prop(Counter.prototype, 'amount');
+state(Counter.prototype, 'count');
+```
+
+### Without [Decorators](https://github.com/tc39/proposal-decorators#decorators) and [Class field initializers](https://github.com/tc39/proposal-class-fields#field-declarations)
+```js
+import * as React from "react";
+import { Render, prop, state } from 'react-unify';
+import { CounterRender } from './CounterRender';
+
+export class Counter extends React.Component {
+  amount;
+  count;
+  
+  constructor(props) {
+    super(props);
+
+    // manually initializing fields
+    this.amount = 1;
+    this.count = 0;
+  }
+
+  increment() {
+    this.count += this.amount;
+  }
+}
+
+Render(CounterRender)(Counter);
+prop(Counter.prototype, 'amount');
+state(Counter.prototype, 'count');
+```
 
 ### Testing
 
@@ -52,13 +115,13 @@ npm install react-unify
 ```
 
 ### Babel
-Enable [decorators](https://github.com/osi-oswald/babel-plugin-transform-decorators-ts-compat) and [class property initializer](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
+Enable [Decorators](https://github.com/osi-oswald/babel-plugin-transform-decorators-ts-compat) and [Class field initializers](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
 
 ```sh
 npm install --save-dev babel-plugin-transform-decorators-ts-compat babel-plugin-transform-class-properties babel-preset-env babel-preset-react
 ```
 
-Add plugin to `.babelrc` file
+Add plugins to `.babelrc` file
 ```json
 {
   "presets": ["env", "react"],
@@ -67,7 +130,7 @@ Add plugin to `.babelrc` file
 ```
 
 ### TypeScript
-Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with compiler option
+Enable [Decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *Class field initializers* are enabled by default
 
 ```json
 {
