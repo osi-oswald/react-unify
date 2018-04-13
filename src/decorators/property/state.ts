@@ -11,7 +11,7 @@ const synchronousState = '@state';
  */
 export function state<C extends React.Component>(
   target: C,
-  key: string,
+  key: keyof C,
   descriptor?: PropertyDescriptor & { initializer? }
 ): void {
   initOnce(target);
@@ -45,7 +45,7 @@ function initOnce<C extends React.Component>(target: C) {
 }
 
 function descriptorFor<C extends React.Component>(
-  key: string
+  key: keyof C
 ): PropertyDescriptor {
   return {
     configurable: true,

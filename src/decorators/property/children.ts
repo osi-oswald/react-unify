@@ -10,8 +10,8 @@ const childrenCache = '@children';
  */
 export function child<C extends React.Component>(
   findChild?: (child, index: number, children) => boolean
-): (target: C, key: string) => void;
-export function child<C extends React.Component>(target: C, key: string): void;
+): (target: C, key: keyof C) => void;
+export function child<C extends React.Component>(target: C, key: keyof C): void;
 export function child<C extends React.Component>() {
   return overloadedDecorator(arguments, findChild);
 }
@@ -26,10 +26,10 @@ function findChild(reactChildren: any[], predicate) {
  */
 export function children<C extends React.Component>(
   filterChildren?: (child, index: number, children) => boolean
-): (target: C, key: string) => void;
+): (target: C, key: keyof C) => void;
 export function children<C extends React.Component>(
   target: C,
-  key: string
+  key: keyof C
 ): void;
 export function children<C extends React.Component>() {
   return overloadedDecorator(arguments, filterChildren);
@@ -57,9 +57,9 @@ function overloadedDecorator(
   };
 }
 
-function decorate(
-  target,
-  key: string,
+function decorate<C extends React.Component>(
+  target: C,
+  key: keyof C,
   mapChildren: (children: any[], predicate) => any,
   predicate?: (child, index: number, children) => boolean
 ) {

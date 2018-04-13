@@ -34,18 +34,24 @@ describe('@child', () => {
   });
 
   it('works without findChild', () => {
-    childDecorator()(Component.prototype, 'myChild');
+    childDecorator<TestComponent>()(Component.prototype, 'myChild');
   });
 
   it('parameter findChild must be a function', () => {
     expect(() =>
-      childDecorator(false as any)(Component.prototype, 'myChildren')
+      childDecorator<TestComponent>(false as any)(
+        Component.prototype,
+        'myChild'
+      )
     ).toThrow('parameter findChild must be a function');
   });
 
   describe('find child', () => {
     beforeEach(() => {
-      childDecorator(c => c === 'myChild')(Component.prototype, 'myChild');
+      childDecorator<TestComponent>(c => c === 'myChild')(
+        Component.prototype,
+        'myChild'
+      );
     });
 
     it('finds child from array', () => {

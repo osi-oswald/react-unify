@@ -3,6 +3,7 @@ import { state as stateDecorator } from './state';
 
 class TestComponent extends React.Component<{}, { myState }> {
   myState;
+  myOtherState;
   updater;
 }
 

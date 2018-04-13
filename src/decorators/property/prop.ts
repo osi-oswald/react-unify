@@ -6,7 +6,7 @@ import * as React from 'react';
  */
 export function prop<C extends React.Component>(
   target: C,
-  key: string,
+  key: keyof C,
   descriptor?: PropertyDescriptor & { initializer? }
 ) {
   const constructor = target.constructor as Function & { defaultProps };
@@ -21,7 +21,7 @@ export function prop<C extends React.Component>(
 }
 
 function descriptorFor<C extends React.Component>(
-  key: string,
+  key,
   constructor: Function & { defaultProps }
 ): PropertyDescriptor {
   return {

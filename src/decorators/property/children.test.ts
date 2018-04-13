@@ -54,18 +54,21 @@ describe('@children', () => {
   });
 
   it('works without filterChildren', () => {
-    childrenDecorator()(Component.prototype, 'myChildren');
+    childrenDecorator<TestComponent>()(Component.prototype, 'myChildren');
   });
 
   it('parameter filterChildren must be a function', () => {
     expect(() =>
-      childrenDecorator(false as any)(Component.prototype, 'myChildren')
+      childrenDecorator<TestComponent>(false as any)(
+        Component.prototype,
+        'myChildren'
+      )
     ).toThrow('parameter filterChildren must be a function');
   });
 
   describe('find children', () => {
     beforeEach(() => {
-      childrenDecorator(c => c === 'myChild')(
+      childrenDecorator<TestComponent>(c => c === 'myChild')(
         Component.prototype,
         'myChildren'
       );

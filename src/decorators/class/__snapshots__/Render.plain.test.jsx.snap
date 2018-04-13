@@ -1,0 +1,87 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`@Render has myChildren 1`] = `
+Array [
+  <i>
+    child 1
+  </i>,
+  <i>
+    child 2
+  </i>,
+]
+`;
+
+exports[`@Render sets Counter.Render 1`] = `
+<div>
+  <p>
+    Count: 
+    0
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;
+
+exports[`@Render updates from @state 1`] = `
+<div>
+  <p>
+    Count: 
+    1
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;
+
+exports[`@Render updates from forceUpdate() 1`] = `
+<div>
+  <p>
+    Count: 
+    1
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;
+
+exports[`@Render updates from getDerivedStateFromProps() 1`] = `
+<div>
+  <p>
+    Count: 
+    1
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;
+
+exports[`@Render updates from setState() 1`] = `
+<div>
+  <p>
+    Count: 
+    1
+  </p>
+  <button
+    onClick={[Function]}
+  >
+    Increment by 
+    1
+  </button>
+</div>
+`;
