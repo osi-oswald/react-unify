@@ -3,7 +3,7 @@ Unify state and props, decouple `render()` and update state synchronously (calli
 
 ## Basic Example
 
-### With [Decorators](https://github.com/tc39/proposal-decorators#decorators) and [Class field initializers](https://github.com/tc39/proposal-class-fields#field-declarations)
+### With [decorators](https://github.com/tc39/proposal-decorators#decorators) and [class field initialization](https://github.com/tc39/proposal-class-fields#field-declarations)
 
 ```jsx
 import * as React from "react";
@@ -31,7 +31,7 @@ export class Counter extends React.Component {
 }
 ```
 
-#### Optionally extract stateless render
+#### Optionally move out stateless render
 ```jsx
 // CounterRender.jsx
 export const CounterRender = counter => (
@@ -45,7 +45,7 @@ export const CounterRender = counter => (
 ```
 
 
-### Without [Decorators](https://github.com/tc39/proposal-decorators#decorators)
+### Without [decorators](https://github.com/tc39/proposal-decorators#decorators)
 ```jsx
 import * as React from "react";
 import { Render, prop, state } from 'react-unify';
@@ -66,7 +66,7 @@ prop(Counter.prototype, 'amount');
 state(Counter.prototype, 'count');
 ```
 
-### Without [Decorators](https://github.com/tc39/proposal-decorators#decorators) and [Class field initializers](https://github.com/tc39/proposal-class-fields#field-declarations)
+### Without [decorators](https://github.com/tc39/proposal-decorators#decorators) and [class field initialization](https://github.com/tc39/proposal-class-fields#field-declarations)
 ```js
 import * as React from "react";
 import { Render, prop, state } from 'react-unify';
@@ -115,7 +115,7 @@ npm install react-unify
 ```
 
 ### Babel
-Enable [Decorators](https://github.com/osi-oswald/babel-plugin-transform-decorators-ts-compat) and [Class field initializers](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
+Enable [decorators](https://github.com/osi-oswald/babel-plugin-transform-decorators-ts-compat) and [class field initialization](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
 
 ```sh
 npm install --save-dev babel-plugin-transform-decorators-ts-compat babel-plugin-transform-class-properties babel-preset-env babel-preset-react
@@ -130,7 +130,7 @@ Add plugins to `.babelrc` file
 ```
 
 ### TypeScript
-Enable [Decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *Class field initializers* are enabled by default
+Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *class field initialization* are enabled by default
 
 ```json
 {
