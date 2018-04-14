@@ -128,7 +128,7 @@ Add plugins to `.babelrc` file, [NOTE: Order of Plugins Matters!](https://github
 ```json
 {
   "presets": ["env", "react"],
-  "plugins": ["transform-decorators-ts-compat", "transform-class-properties"]
+  "plugins": ["transform-decorators-legacy", "transform-class-properties"]
 }
 ```
 
