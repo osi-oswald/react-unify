@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { applyNewDescriptor } from './utils';
 
 /**
  * Elevate `this.props.someProp` to `this.someProp` and
@@ -7,17 +8,14 @@ import * as React from 'react';
 export function prop<C extends React.Component>(
   target: C,
   key: keyof C,
-  descriptor?: PropertyDescriptor & { initializer? }
+  descriptor?
 ) {
-  const constructor = target.constructor as Function & { defaultProps };
-  const propDescriptor: typeof descriptor = descriptorFor(key, constructor);
-
-  Object.defineProperty(target, key, propDescriptor);
-
-  if (descriptor && descriptor.initializer) {
-    propDescriptor.initializer = descriptor.initializer;
-    return propDescriptor as any;
-  }
+  return applyNewDescriptor(
+    target,
+    key,
+    descriptor,
+    descriptorFor(key, target.constructor as any)
+  );
 }
 
 function descriptorFor<C extends React.Component>(

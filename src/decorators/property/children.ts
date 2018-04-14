@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { applyNewDescriptor } from './utils';
 
 const isInitialized = '@children:isInitialized';
 const lastProps = '@children:lastProps';
@@ -44,7 +45,7 @@ function overloadedDecorator(
   mapChildren: (children: any[], predicate) => any
 ) {
   if (typeof args[0] === 'object') {
-    return decorate(args[0], args[1], mapChildren);
+    return decorate(args[0], args[1], args[2], mapChildren);
   }
 
   const predicate = args[0];
@@ -52,17 +53,28 @@ function overloadedDecorator(
     throw new Error(`parameter ${mapChildren.name} must be a function`);
   }
 
-  return (target, key) => {
-    decorate(target, key, mapChildren, predicate);
+  return (target, key, descriptor) => {
+    decorate(target, key, descriptor, mapChildren, predicate);
   };
 }
 
 function decorate<C extends React.Component>(
   target: C,
   key: keyof C,
+  descriptor: PropertyDescriptor & { initializer? },
   mapChildren: (children: any[], predicate) => any,
   predicate?: (child, index: number, children) => boolean
 ) {
+  initOnce(target);
+  return applyNewDescriptor(
+    target,
+    key,
+    descriptor,
+    descriptorFor(key, mapChildren, predicate)
+  );
+}
+
+function initOnce<C extends React.Component>(target: C) {
   if (!target[isInitialized]) {
     target[isInitialized] = true;
 
@@ -93,8 +105,10 @@ function decorate<C extends React.Component>(
       };
     }
   }
+}
 
-  Object.defineProperty(target, key, {
+function descriptorFor(key, mapChildren, predicate) {
+  return {
     configurable: true,
     enumerable: true,
 
@@ -117,5 +131,5 @@ function decorate<C extends React.Component>(
 
       return cached;
     }
-  });
+  };
 }

@@ -1,5 +1,5 @@
 # react-unify 💍
-Unify state and props, decouple `render()` and update state synchronously (calling `setState()` for you)
+Unify state and props, decouple render() and update state synchronously
 
 ## Basic Examples
 
@@ -115,13 +115,16 @@ npm install react-unify
 ```
 
 ### Babel
-Enable [decorators](https://github.com/osi-oswald/babel-plugin-transform-decorators-ts-compat) and [class field initialization](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins
+Enable [decorators](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) and [class field initialization](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins. Unfortunately **transform-decorators-legacy** does not support [replacing class properties with a getter/setter](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/pull/76) right now :-(
+
+Use my version of **transform-decorators-legacy** or don't use decorators for now.
 
 ```sh
-npm install --save-dev babel-plugin-transform-decorators-ts-compat babel-plugin-transform-class-properties babel-preset-env babel-preset-react
+npm install osi-oswald/babel-plugin-transform-decorators-legacy.git#v1.4.1
+npm install babel-plugin-transform-class-properties
 ```
 
-Add plugins to `.babelrc` file
+Add plugins to `.babelrc` file, [NOTE: Order of Plugins Matters!](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy#note-order-of-plugins-matters)
 ```json
 {
   "presets": ["env", "react"],
@@ -143,7 +146,6 @@ Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html)
 ### CodeSandbox
 Add `react-unify` as dependency, decorators are supported by default :-)
 
-* [JavaScript playground](https://codesandbox.io/s/wnyzll2x1w)
 * [TypeScript playground](https://codesandbox.io/s/momx88y1wy)
 
 

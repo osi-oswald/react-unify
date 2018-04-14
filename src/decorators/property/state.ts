@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { applyNewDescriptor } from './utils';
 
 const isInitialized = '@state:initialized';
 const synchronousState = '@state';
@@ -12,18 +13,10 @@ const synchronousState = '@state';
 export function state<C extends React.Component>(
   target: C,
   key: keyof C,
-  descriptor?: PropertyDescriptor & { initializer? }
+  descriptor?
 ): void {
   initOnce(target);
-
-  const stateDescriptior: typeof descriptor = descriptorFor(key);
-
-  Object.defineProperty(target, key, stateDescriptior);
-
-  if (descriptor && descriptor.initializer) {
-    stateDescriptior.initializer = descriptor.initializer;
-    return stateDescriptior as any;
-  }
+  return applyNewDescriptor(target, key, descriptor, descriptorFor(key));
 }
 
 function initOnce<C extends React.Component>(target: C) {
