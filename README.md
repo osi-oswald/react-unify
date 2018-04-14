@@ -1,5 +1,5 @@
 # react-unify 💍
-Unify state and props, decouple render() and update state synchronously
+Unify state and props, decouple render() and update state synchronously (calling setState() for you)
 
 ## Basic Examples
 
@@ -109,9 +109,23 @@ test('Counter instance', () => {
 });
 ```
 
+### Demo
+[CodeSandbox playground with TypeScript](https://codesandbox.io/s/momx88y1wy)
+
 ## Installation
 ```sh
 npm install react-unify
+```
+
+### TypeScript
+Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *class field initialization* is enabled by default
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true
+  }
+}
 ```
 
 ### Babel
@@ -131,23 +145,6 @@ Add plugins to `.babelrc` file, [NOTE: Order of Plugins Matters!](https://github
   "plugins": ["transform-decorators-legacy", "transform-class-properties"]
 }
 ```
-
-### TypeScript
-Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *class field initialization* is enabled by default
-
-```json
-{
-  "compilerOptions": {
-    "experimentalDecorators": true
-  }
-}
-```
-
-### CodeSandbox
-Add `react-unify` as dependency, decorators are supported by default :-)
-
-* [TypeScript playground](https://codesandbox.io/s/momx88y1wy)
-
 
 ## API
 
