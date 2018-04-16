@@ -61,7 +61,7 @@ function overloadedDecorator(
 function decorate<C extends React.Component>(
   target: C,
   key: keyof C,
-  descriptor: PropertyDescriptor & { initializer? },
+  descriptor: PropertyDescriptor,
   mapChildren: (children: any[], predicate) => any,
   predicate?: (child, index: number, children) => boolean
 ) {

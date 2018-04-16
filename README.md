@@ -110,7 +110,8 @@ test('Counter instance', () => {
 ```
 
 ### Demo
-[CodeSandbox playground with TypeScript](https://codesandbox.io/s/momx88y1wy)
+* [create-react-app with TypeScript](https://codesandbox.io/s/momx88y1wy)
+* [create-react-app without Decorators](https://codesandbox.io/s/wnyzll2x1w)
 
 ## Installation
 ```sh
@@ -118,7 +119,7 @@ npm install react-unify
 ```
 
 ### TypeScript
-Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json` with a compiler option, *class field initialization* is enabled by default
+Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html) in `tsconfig.json`, *class field initialization* is enabled by default.
 
 ```json
 {
@@ -129,12 +130,12 @@ Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html)
 ```
 
 ### Babel
-Enable [decorators](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) and [class field initialization](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins. Unfortunately **transform-decorators-legacy** does not support [replacing class properties with a getter/setter](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/pull/76) right now :-(
+Enable [decorators](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) and [class field initialization](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins. 
 
-Use my version of **transform-decorators-legacy** or don't use decorators for now.
+Unfortunately **transform-decorators-legacy** does not support [replacing class properties with a getter/setter](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/pull/76). You need to use my version of it or go [without decorators](#without-decorators) for now.
 
 ```sh
-npm install osi-oswald/babel-plugin-transform-decorators-legacy.git#v1.4.1
+npm install osi-oswald/babel-plugin-transform-decorators-legacy.git#v1.4.2
 npm install babel-plugin-transform-class-properties
 ```
 
@@ -145,6 +146,11 @@ Add plugins to `.babelrc` file, [NOTE: Order of Plugins Matters!](https://github
   "plugins": ["transform-decorators-legacy", "transform-class-properties"]
 }
 ```
+
+### create-react-app
+Unfortunately [decorators are not supported at the moment](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#can-i-use-decorators). You would need to eject and follow the [Babel instructions](#babel), or go [without decorators](#without-decorators) for now. 
+
+*Class field initialization* is enabled by default.
 
 ## API
 
