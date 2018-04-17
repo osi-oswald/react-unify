@@ -20,13 +20,12 @@ import { Render, prop, state } from 'react-unify';
 ))
 export class Counter extends React.Component {
   @prop amount = 1; // gets this.props.amount, sets defaultProps.amount
-  @state count = 0; // access this.state.count in a synchronous way
+  @state count = 0; // access to this.state.count in a synchronous way
 
   increment() {
     this.count += this.amount;
     // this.count is updated synchronously
-    // calls setState() for you, triggering a rerender
-    // (this.state.count gets updated asynchronously)
+    // calls this.setState({count: this.state.count + this.props.amount})
   }
 }
 ```
@@ -66,36 +65,7 @@ prop(Counter.prototype, 'amount');
 state(Counter.prototype, 'count');
 ```
 
-### Without [decorators](https://github.com/tc39/proposal-decorators#decorators) and [class field initialization](https://github.com/tc39/proposal-class-fields#field-declarations)
-```js
-import * as React from "react";
-import { Render, prop, state } from 'react-unify';
-import { CounterRender } from './CounterRender';
-
-export class Counter extends React.Component {
-  amount;
-  count;
-  
-  constructor(props) {
-    super(props);
-
-    // manually initializing fields
-    this.amount = 1;
-    this.count = 0;
-  }
-
-  increment() {
-    this.count += this.amount;
-  }
-}
-
-Render(CounterRender)(Counter);
-prop(Counter.prototype, 'amount');
-state(Counter.prototype, 'count');
-```
-
 ### Testing
-
 ```jsx
 test('Counter render', () => {
   expect(CounterRender({ count: 0, amount: 1 })).toMatchSnapshot();
@@ -132,7 +102,7 @@ Enable [decorators](http://www.typescriptlang.org/docs/handbook/decorators.html)
 ### Babel
 Enable [decorators](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy) and [class field initialization](https://babeljs.io/docs/plugins/transform-class-properties/) with plugins. 
 
-Unfortunately **transform-decorators-legacy** does not support [replacing class properties with a getter/setter](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/pull/76). You need to use my version of it or go [without decorators](#without-decorators) for now.
+Unfortunately **transform-decorators-legacy** does not support [replacing class properties with a getter/setter](https://github.com/loganfsmyth/babel-plugin-transform-decorators-legacy/pull/76). You need to use [my version](https://github.com/osi-oswald/babel-plugin-transform-decorators-legacy) of it or go [without decorators](#without-decorators) for now.
 
 ```sh
 npm install osi-oswald/babel-plugin-transform-decorators-legacy.git#v1.4.2
