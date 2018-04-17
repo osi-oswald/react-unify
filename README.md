@@ -1,7 +1,7 @@
 # react-unify 💍
 Unify state and props, decouple render() and update state synchronously (calling setState() for you)
 
-## Basic Examples
+## Simple Examples
 
 ### With [decorators](https://github.com/tc39/proposal-decorators#decorators) and [class field initialization](https://github.com/tc39/proposal-class-fields#field-declarations)
 
@@ -31,7 +31,7 @@ export class Counter extends React.Component {
 }
 ```
 
-#### Optionally move out stateless render
+#### Optionally extract stateless render
 ```jsx
 // CounterRender.jsx
 export const CounterRender = counter => (
@@ -109,7 +109,7 @@ test('Counter instance', () => {
 });
 ```
 
-### Demo
+### Live Demos
 * [create-react-app with TypeScript](https://codesandbox.io/s/momx88y1wy)
 * [create-react-app without Decorators](https://codesandbox.io/s/wnyzll2x1w)
 
@@ -153,6 +153,11 @@ Unfortunately [decorators are not supported at the moment](https://github.com/fa
 *Class field initialization* is enabled by default.
 
 ## API
+
+* [@Render](#render)
+* [@state](#state)
+* [@prop](#prop)
+* [@child / @children](#child--children)
 
 ### @Render
 
