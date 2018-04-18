@@ -9,7 +9,7 @@ Unify state and props, decouple render() and update state synchronously (calling
 import * as React from "react";
 import { Render, prop, state } from 'react-unify';
 
-// decoupled stateless render()
+// decoupled stateless component render()
 @Render(counter => (
   <div>
     <p>Count: {counter.count}</p>
@@ -26,6 +26,7 @@ export class Counter extends React.Component {
     this.count += this.amount;
     // this.count is updated synchronously
     // calls this.setState({count: this.state.count + this.props.amount})
+    // (updating this.state.count asynchronously)
   }
 }
 ```
