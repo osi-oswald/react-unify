@@ -1,5 +1,5 @@
 # react-unify 💍
-Unify state and props, decouple render() and update state synchronously (calling setState() for you)
+Unify state and props, decouple render() and handle state synchronously
 
 ## Simple Examples
 
@@ -26,7 +26,7 @@ export class Counter extends React.Component {
     this.count += this.amount;
     // this.count is updated synchronously
     // calls this.setState({count: this.state.count + this.props.amount})
-    // (updating this.state.count asynchronously)
+    // (this.state.count will be updated asynchronously)
   }
 }
 ```
@@ -45,7 +45,7 @@ export const CounterRender = counter => (
 ```
 
 
-### Without [decorators](https://github.com/tc39/proposal-decorators#decorators)
+### Without decorators
 ```jsx
 import * as React from "react";
 import { Render, prop, state } from 'react-unify';
@@ -81,7 +81,7 @@ test('Counter instance', () => {
 ```
 
 ### Live Demos
-* [create-react-app with TypeScript](https://codesandbox.io/s/momx88y1wy)
+* [create-react-app with TypeScript Decorators](https://codesandbox.io/s/momx88y1wy)
 * [create-react-app without Decorators](https://codesandbox.io/s/wnyzll2x1w)
 
 ## Installation
@@ -255,7 +255,7 @@ Specialized alternative to `@prop children`. Extract and name child(ren) from `t
 ```js
 class MyComponent extends React.Component {
   // gets React.Children.toArray(this.props.children)[0]
-  @child myChild;
+  @child mySingleChild;
 
   // gets React.Children.toArray(this.props.children)
   @children allMyChildren; 
@@ -264,6 +264,6 @@ class MyComponent extends React.Component {
   @child(findChild) mySpecialChild;
 
   // gets React.Children.toArray(this.props.children).filter(filterChildren)
-  @children(filterChildren) allMySpecialChildren; 
+  @children(filterChildren) mySpecialChildren; 
 }
 ```
