@@ -19,8 +19,8 @@ import { Render, prop, state } from 'react-unify';
   </div>
 ))
 export class Counter extends React.Component {
-  @prop amount = 1; // gets this.props.amount, sets defaultProps.amount
-  @state count = 0; // access to this.state.count in a synchronous way
+  @prop amount = 1; // get this.props.amount, set defaultProps.amount
+  @state count = 0; // handle this.state.count synchronously
 
   increment() {
     this.count += this.amount;
