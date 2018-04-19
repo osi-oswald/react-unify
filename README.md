@@ -81,8 +81,8 @@ test('Counter instance', () => {
 ```
 
 ### Live Demos
-* [create-react-app with TypeScript Decorators](https://codesandbox.io/s/momx88y1wy)
-* [create-react-app without Decorators](https://codesandbox.io/s/wnyzll2x1w)
+* [create-react-app with decorators (TypeScript)](https://codesandbox.io/s/momx88y1wy)
+* [create-react-app without decorators](https://codesandbox.io/s/wnyzll2x1w)
 
 ## Installation
 ```sh
